@@ -6,14 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
-import fileio.Input;
+import fileio.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.CollationElementIterator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * The entry point to this homework. It runs the checker that tests your implentation.
@@ -70,6 +74,163 @@ public final class Main {
         ArrayNode output = objectMapper.createArrayNode();
 
         //TODO add here the entry point to your implementation
+
+        DecksInput playerOne = inputData.getPlayerOneDecks();
+        DecksInput playerTwo = inputData.getPlayerTwoDecks();
+//        Player playerOne = new Player(inputData.getPlayerOneDecks());
+//        Player playerTwo = new Player(inputData.getPlayerTwoDecks());
+
+        int nrOfGames = inputData.getGames().size();
+        for (int i = 0; i < nrOfGames; i++) {
+//            Game newGame = new Game(inputData.getGames().get(i).getStartGame(), inputData.getGames().get(i));
+            StartGameInput newGame = inputData.getGames().get(i).getStartGame();
+
+            // current game command list
+            ArrayList<ActionsInput> commandList = inputData.getGames().get(i).getActions();
+
+            // players selected decks
+            ArrayList<CardInput> playerOneDeck = playerOne.getDecks().get(newGame.getPlayerOneDeckIdx());
+            ArrayList<CardInput> playerTwoDeck = playerOne.getDecks().get(newGame.getPlayerTwoDeckIdx());
+
+            // players cards in hand (we begin with hand empty, one card is added per round)
+            ArrayList<CardInput> playerOneDeckInHand = new ArrayList<>();
+            ArrayList<CardInput> playerTwoDeckInHand = new ArrayList<>();
+
+            Collections.shuffle(playerOneDeck, new Random(newGame.getShuffleSeed()));
+            Collections.shuffle(playerTwoDeck, new Random(newGame.getShuffleSeed()));
+
+            playerOneDeckInHand.add(playerOneDeck.remove(0));
+            playerTwoDeckInHand.add(playerTwoDeck.remove(0));
+
+            ArrayList<ArrayList<CardInput>> playingTable = new ArrayList<>(4);
+
+            ArrayList<CardInput> row0 = new ArrayList<>(5);
+            ArrayList<CardInput> row1 = new ArrayList<>(5);
+            ArrayList<CardInput> row2 = new ArrayList<>(5);
+            ArrayList<CardInput> row3 = new ArrayList<>(5);
+
+            playingTable.add(row0);
+            playingTable.add(row1);
+            playingTable.add(row2);
+            playingTable.add(row3);
+
+            // we iterate through the command list
+            for (int j = 0; j < commandList.size(); j++) {
+                ActionsInput command = commandList.get(j);
+                int playerIdx;
+                int cardAttackerX;
+                int cardAttackerY;
+                int cardAttackedX;
+                int cardAttackedY;
+                int affectedRow;
+                int handIdx;
+
+                switch (command.getCommand()) {
+                    case ("getCardsInHand"):
+                        playerIdx = command.getPlayerIdx();
+                        if (playerIdx == 1) {
+                            output.addPOJO(playerOneDeckInHand);
+                        } else {
+                            output.addPOJO(playerTwoDeckInHand);
+                        }
+                        break;
+
+                    case ("getPlayerDeck"):
+                        playerIdx = command.getPlayerIdx();
+                        if (playerIdx == 1) {
+                            output.addPOJO(playerOneDeck);
+                        } else {
+                            output.addPOJO(playerTwoDeck);
+                        }
+                        break;
+
+                    case ("getCardsOnTable"):
+                        output.addPOJO(playingTable);
+                        break;
+
+                    case ("getPlayerTurn"):
+                        break;
+
+                    case ("getPlayerHero"):
+                        playerIdx = command.getPlayerIdx();
+                        if (playerIdx == 1) {
+                            output.addPOJO(newGame.getPlayerOneHero());
+                        } else {
+                            output.addPOJO(newGame.getPlayerTwoHero());
+                        }
+                        break;
+
+                    case ("getCardAtPosition"):
+                        int x = command.getX();
+                        int y = command.getY();
+//                        output.addPOJO(playingTable.get(x).get(y));
+                        break;
+
+                    case ("getPlayerMana"):
+                        playerIdx = command.getPlayerIdx();
+                        if (playerIdx == 1) {
+
+                        } else {
+
+                        }
+                        break;
+
+                    case ("getEnvironmentCardsInHand"):
+                        playerIdx = command.getPlayerIdx();
+                        if (playerIdx == 1) {
+
+                        } else {
+                        }
+                        break;
+
+                    case ("getFrozenCardsOnTable"):
+                        break;
+
+                    case ("getTotalGamesPlayed"):
+                        break;
+
+                    case ("getPlayerOneWins"):
+                        break;
+
+                    case ("endPlayerTurn"):
+                        break;
+
+                    case ("placeCard"):
+                        handIdx = command.getHandIdx();
+                        break;
+
+                    case ("cardUsesAttack"):
+                        cardAttackerX = command.getX();
+                        cardAttackerY = command.getY();
+                        cardAttackedX = command.getX();
+                        cardAttackedY = command.getY();
+                        break;
+
+                    case ("cardUsesAbility"):
+                        cardAttackerX = command.getX();
+                        cardAttackerY = command.getY();
+                        cardAttackedX = command.getX();
+                        cardAttackedY = command.getY();
+                        break;
+
+                    case ("useAttackHero"):
+                        cardAttackerX = command.getX();
+                        cardAttackerY = command.getY();
+                        break;
+
+                    case ("useHeroAbility"):
+                        affectedRow = command.getAffectedRow();;
+                        break;
+
+                    case ("useEnvironmentCard"):
+                        handIdx = command.getHandIdx();
+                        affectedRow = command.getAffectedRow();
+                }
+            }
+
+
+        }
+
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);

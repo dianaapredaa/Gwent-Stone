@@ -13,6 +13,15 @@ public final class CardInput {
     public CardInput() {
     }
 
+    public CardInput(CardInput toCopy) {
+        this.mana = toCopy.mana;
+        this.attackDamage = toCopy.attackDamage;
+        this.health = toCopy.health;
+        this.description = toCopy.description;
+        this.colors = toCopy.colors;
+        this.name = toCopy.name;
+    }
+
     public int getMana() {
         return mana;
     }
