@@ -1,19 +1,2 @@
 Starting audit...
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\fileio\CardInput.java:16:22: Parameter toCopy should be final. [FinalParameters]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:9:14: Using the '.*' form of import should be avoided - fileio.*. [AvoidStarImport]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:16:8: Unused import - java.text.CollationElementIterator. [UnusedImports]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:85: Line is longer than 100 characters (found 111). [LineLength]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:92: Line is longer than 100 characters (found 105). [LineLength]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:93: Line is longer than 100 characters (found 105). [LineLength]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:105:76: '4' is a magic number. [MagicNumber]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:107:57: '5' is a magic number. [MagicNumber]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:108:57: '5' is a magic number. [MagicNumber]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:109:57: '5' is a magic number. [MagicNumber]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:110:57: '5' is a magic number. [MagicNumber]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:122:17: switch without "default" clause. [MissingSwitchDefault]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:164:45: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:166:32: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:173:45: Must have at least one statement. [EmptyBlock]
-[ERROR] C:\Users\Diana\Desktop\Gwent-Stone\.\src\main\Main.java:175:32: Must have at least one statement. [EmptyBlock]
 Audit done.
-Checkstyle ends with 16 errors.

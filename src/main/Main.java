@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.*;
 
 import java.io.File;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
@@ -65,6 +65,10 @@ public final class Main {
      * @param filePath2 for output file
      * @throws IOException in case of exceptions to reading / writing
      */
+
+//    public ArrayList<ArrayList<Cards>> setCardType(DecksInput decksInput) {
+//
+//    }
     public static void action(final String filePath1,
                               final String filePath2) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -77,12 +81,9 @@ public final class Main {
 
         DecksInput playerOne = inputData.getPlayerOneDecks();
         DecksInput playerTwo = inputData.getPlayerTwoDecks();
-//        Player playerOne = new Player(inputData.getPlayerOneDecks());
-//        Player playerTwo = new Player(inputData.getPlayerTwoDecks());
 
         int nrOfGames = inputData.getGames().size();
         for (int i = 0; i < nrOfGames; i++) {
-//            Game newGame = new Game(inputData.getGames().get(i).getStartGame(), inputData.getGames().get(i));
             StartGameInput newGame = inputData.getGames().get(i).getStartGame();
 
             // current game command list
@@ -114,6 +115,12 @@ public final class Main {
             playingTable.add(row2);
             playingTable.add(row3);
 
+            CardInput playerOneHero = newGame.getPlayerOneHero();
+            CardInput playerTwoHero = newGame.getPlayerTwoHero();
+
+            playerOneHero.setHealth(30);
+            playerTwoHero.setHealth(30);
+
             // we iterate through the command list
             for (int j = 0; j < commandList.size(); j++) {
                 ActionsInput command = commandList.get(j);
@@ -127,20 +134,39 @@ public final class Main {
 
                 switch (command.getCommand()) {
                     case ("getCardsInHand"):
+
                         playerIdx = command.getPlayerIdx();
                         if (playerIdx == 1) {
-                            output.addPOJO(playerOneDeckInHand);
+                            ObjectNode outputNode = objectMapper.createObjectNode();
+                            outputNode.put("command", "getCardsInHand");
+                            outputNode.put("playerIdx", command.getPlayerIdx());
+                            outputNode.putPOJO("output", playerOneDeckInHand);
+                            output.addPOJO(outputNode);
+
+                            //                          output.addPOJO(playerOneDeckInHand);
                         } else {
-                            output.addPOJO(playerTwoDeckInHand);
+                            ObjectNode outputNode = objectMapper.createObjectNode();
+                            outputNode.put("command", "getCardsInHand");
+                            outputNode.put("playerIdx", command.getPlayerIdx());
+                            outputNode.putPOJO("output", playerTwoDeckInHand);
+                            output.addPOJO(outputNode);
                         }
                         break;
 
                     case ("getPlayerDeck"):
                         playerIdx = command.getPlayerIdx();
                         if (playerIdx == 1) {
-                            output.addPOJO(playerOneDeck);
+                            ObjectNode outputNode = objectMapper.createObjectNode();
+                            outputNode.put("command", "getPlayerDeck");
+                            outputNode.put("playerIdx", command.getPlayerIdx());
+                            outputNode.putPOJO("output", playerOneDeck);
+                            output.addPOJO(outputNode);
                         } else {
-                            output.addPOJO(playerTwoDeck);
+                            ObjectNode outputNode = objectMapper.createObjectNode();
+                            outputNode.put("command", "getPlayerDeck");
+                            outputNode.put("playerIdx", command.getPlayerIdx());
+                            outputNode.putPOJO("output", playerTwoDeck);
+                            output.addPOJO(outputNode);
                         }
                         break;
 
@@ -153,11 +179,16 @@ public final class Main {
 
                     case ("getPlayerHero"):
                         playerIdx = command.getPlayerIdx();
+                        ObjectNode outputNode = objectMapper.createObjectNode();
+                        outputNode.put("command", "getPlayerHero");
+                        outputNode.put("playerIdx", playerIdx);
+
                         if (playerIdx == 1) {
-                            output.addPOJO(newGame.getPlayerOneHero());
+                            outputNode.putPOJO("output", newGame.getPlayerOneHero());
                         } else {
-                            output.addPOJO(newGame.getPlayerTwoHero());
+                            outputNode.putPOJO("output", newGame.getPlayerTwoHero());
                         }
+                        output.addPOJO(outputNode);
                         break;
 
                     case ("getCardAtPosition"):
@@ -230,7 +261,6 @@ public final class Main {
 
 
         }
-
 
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
