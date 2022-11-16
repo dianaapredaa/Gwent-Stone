@@ -1,0 +1,152 @@
+[ {
+  "command" : "placeCard",
+  "handIdx" : 0,
+  "output" : "Not enough mana to place card on table."
+}, {
+  "command" : "placeCard",
+  "handIdx" : 0,
+  "output" : "Not enough mana to place card on table."
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "health" : 3,
+    "attackDamage" : 6
+  } ]
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 5
+}, {
+  "command" : "getPlayerTurn",
+  "output" : 1
+}, {
+  "command" : "getCardAtPosition",
+  "x" : 2,
+  "y" : 0,
+  "output" : "No card at that position."
+}, {
+  "command" : "getCardAtPosition",
+  "x" : 3,
+  "y" : 0,
+  "output" : "No card at that position."
+}, {
+  "command" : "getPlayerHero",
+  "playerIdx" : 1,
+  "output" : {
+    "mana" : 3,
+    "description" : "Standard card: Absolute order, a soldier must devote his life to his General.",
+    "colors" : [ "Red", "Black", "Purple" ],
+    "name" : "General Kocioraw",
+    "health" : 30
+  }
+}, {
+  "command" : "getPlayerHero",
+  "playerIdx" : 2,
+  "output" : {
+    "mana" : 3,
+    "description" : "Premium card: Glory to all we see, glory to all he is, glory to everyone who will try to escape him.",
+    "colors" : [ "Black", "Red", "Grey" ],
+    "name" : "Lord Royce",
+    "health" : 30
+  }
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "health" : 3,
+    "attackDamage" : 6
+  } ]
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 11
+}, {
+  "command" : "getPlayerTurn",
+  "output" : 1
+}, {
+  "command" : "getCardAtPosition",
+  "x" : 3,
+  "y" : 1,
+  "output" : "No card at that position."
+}, {
+  "command" : "getCardAtPosition",
+  "x" : 2,
+  "y" : 0,
+  "output" : "No card at that position."
+}, {
+  "command" : "getPlayerHero",
+  "playerIdx" : 1,
+  "output" : {
+    "mana" : 3,
+    "description" : "Standard card: Absolute order, a soldier must devote his life to his General.",
+    "colors" : [ "Red", "Black", "Purple" ],
+    "name" : "General Kocioraw",
+    "health" : 30
+  }
+}, {
+  "command" : "getPlayerHero",
+  "playerIdx" : 2,
+  "output" : {
+    "mana" : 3,
+    "description" : "Premium card: Glory to all we see, glory to all he is, glory to everyone who will try to escape him.",
+    "colors" : [ "Black", "Red", "Grey" ],
+    "name" : "Lord Royce",
+    "health" : 30
+  }
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 1,
+  "output" : 11
+}, {
+  "command" : "getPlayerMana",
+  "playerIdx" : 2,
+  "output" : 12
+}, {
+  "command" : "getCardsOnTable",
+  "output" : [ [ {
+    "mana" : 2,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "health" : 3,
+    "attackDamage" : 6
+  } ], [ ], [ ], [ {
+    "mana" : 1,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "colors" : [ "Yellow", "White" ],
+    "name" : "Disciple",
+    "health" : 4,
+    "attackDamage" : 0
+  } ] ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 1,
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
+    "colors" : [ "Black", "Grey", "Blue" ],
+    "name" : "Sentinel",
+    "health" : 3,
+    "attackDamage" : 6
+  } ]
+}, {
+  "command" : "getCardsInHand",
+  "playerIdx" : 2,
+  "output" : [ {
+    "mana" : 1,
+    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
+    "colors" : [ "Yellow", "White" ],
+    "name" : "Disciple",
+    "health" : 4,
+    "attackDamage" : 0
+  } ]
+} ]

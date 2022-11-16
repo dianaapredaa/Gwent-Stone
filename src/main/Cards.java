@@ -1,8 +1,10 @@
 package main;
 
 import fileio.CardInput;
+import fileio.DecksInput;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public abstract class Cards {
     private int mana;
@@ -13,7 +15,7 @@ public abstract class Cards {
     public Cards(int mana, String description, ArrayList<String> colors, String name) {
         this.mana = mana;
         this.description = description;
-        this.colors = colors;
+        this.colors = new ArrayList<>(colors);
         this.name = name;
     }
 
@@ -48,6 +50,29 @@ public abstract class Cards {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static LinkedList<LinkedList<Cards>> setCardType(DecksInput decksInput) {
+        LinkedList<LinkedList<Cards>> deckOfDecks = new LinkedList<>();
+        for (int i = 0; i < decksInput.getDecks().size(); i++) {
+            ArrayList<CardInput> cardInputsDeck = decksInput.getDecks().get(i);
+            LinkedList<Cards> deck = new LinkedList<>();
+            for (int j = 0; j < cardInputsDeck.size(); j++) {
+                String name = cardInputsDeck.get(j).getName();
+                if (name.equals("The Ripper") || name.equals("Miraj") || name.equals("The Cursed One") ||
+                        name.equals("Disciple") || name.equals("Sentinel") || name.equals("Berserker") ||
+                        name.equals("Goliath") || name.equals("Warden")) {
+                    Minion minion = new Minion(cardInputsDeck.get(j));
+                    deck.addLast(minion);
+                } else if (name.equals("Firestorm") || name.equals("Winterfell") || name.equals("Heart Hound")) {
+                    Environment environment = new Environment(cardInputsDeck.get(j));
+                    deck.addLast(environment);
+                }
+
+            }
+            deckOfDecks.addLast(deck);
+        }
+        return deckOfDecks;
+    }
 }
 
 class Hero extends Cards {
@@ -64,7 +89,7 @@ class Hero extends Cards {
 
     public Hero(CardInput cardInput) {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(), cardInput.getName());
-        this.health = cardInput.getHealth();
+        this.health = 30;
     }
 }
 
@@ -100,5 +125,112 @@ class Minion extends Cards {
         this.health = cardInput.getHealth();
         this.attackDamage = cardInput.getAttackDamage();
     }
+
+
 }
 
+class TheRipper extends Minion {
+    // Weak Knees: -2 atac pentru un minion din tabăra adversă.
+    // atac diferit de 0
+    public TheRipper(CardInput cardInput) {
+        super(cardInput);
+    }
+
+}
+class Miraj extends Minion {
+    // Skyjack: face swap între viața lui și viața unui minion din tabăra adversă.
+    // atac diferit de 0
+    public Miraj(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class TheCursedOne extends Minion {
+    // Shapeshift: face swap între viața unui minion din tabăra adversă și atacul aceluiași minion
+    // atac 0
+    public TheCursedOne(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Disciple extends Minion {
+    // God's Plan: +2 viață pentru un minion din tabăra lui.
+    // atac 0
+    public Disciple(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Sentinel extends Minion {
+    public Sentinel(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Berserker extends Minion {
+    public Berserker(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Goliath extends Minion {
+    public Goliath(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Warden extends Minion {
+    public Warden(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Firestorm extends Environment {
+    // Scade cu 1 viața tuturor minionilor de pe rând.
+    public Firestorm(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class Winterfell extends Environment {
+    // Toate cărțile de pe rând stau o tură.
+    public Winterfell(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class HeartHound extends Environment {
+    // Se fură minionul adversarului cu cea mai mare viață de pe rând și se pune pe rândul “oglindit” aferent jucătorului.
+    public HeartHound(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class LordRoyce extends Hero {
+    // Sub-Zero: îngheață cartea cu cel mai mare atac de pe rând.
+
+    public LordRoyce(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class EmpressThorina extends Hero {
+    // Low Blow: distruge cartea cu cea mai mare viață de pe rând.
+    public EmpressThorina(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class KingMudface extends Hero {
+    // Earth Born: +1 viață pentru toate cărțile de pe rând.
+    public KingMudface(CardInput cardInput) {
+        super(cardInput);
+    }
+}
+
+class GeneralKocioraw extends  Hero {
+    // Blood Thirst: +1 atac pentru toate cărțile de pe rând.
+    public GeneralKocioraw(CardInput cardInput) {
+        super(cardInput);
+    }
+}
