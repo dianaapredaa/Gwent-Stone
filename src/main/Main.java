@@ -124,7 +124,7 @@ public final class Main {
 
             // get first turn
             int turn = newGame.getStartingPlayer();
-            int numberOfTurns = 1;
+            int numberOfRounds = 1;
 
             // iterate through the command list
             for (int j = 0; j < commandList.size(); j++) {
@@ -137,36 +137,36 @@ public final class Main {
                 int affectedRow;
                 int handIdx;
                 ObjectNode outputNode;
+                Cards cardToPlace;
+                String cardName;
 
                 switch (command.getCommand()) {
                     case ("getCardsInHand"):
                         playerIdx = command.getPlayerIdx();
+                        outputNode = objectMapper.createObjectNode();
                         if (playerIdx == 1) {
-                            outputNode = objectMapper.createObjectNode();
                             outputNode.put("command", "getCardsInHand");
                             outputNode.put("playerIdx", command.getPlayerIdx());
-                            outputNode.putPOJO("output", playerOneDeckInHand);
+                            outputNode.putPOJO("output", new ArrayList<>(playerOneDeckInHand));
                         } else {
-                            outputNode = objectMapper.createObjectNode();
                             outputNode.put("command", "getCardsInHand");
                             outputNode.put("playerIdx", command.getPlayerIdx());
-                            outputNode.putPOJO("output", playerTwoDeckInHand);
+                            outputNode.putPOJO("output", new ArrayList<>(playerTwoDeckInHand));
                         }
                         output.addPOJO(outputNode);
                         break;
 
                     case ("getPlayerDeck"):
                         playerIdx = command.getPlayerIdx();
+                        outputNode = objectMapper.createObjectNode();
                         if (playerIdx == 1) {
-                            outputNode = objectMapper.createObjectNode();
                             outputNode.put("command", "getPlayerDeck");
                             outputNode.put("playerIdx", command.getPlayerIdx());
-                            outputNode.putPOJO("output", playerOneDeck);
+                            outputNode.putPOJO("output", new ArrayList<>(playerOneDeck));
                         } else {
-                            outputNode = objectMapper.createObjectNode();
                             outputNode.put("command", "getPlayerDeck");
                             outputNode.put("playerIdx", command.getPlayerIdx());
-                            outputNode.putPOJO("output", playerTwoDeck);
+                            outputNode.putPOJO("output", new ArrayList<>(playerTwoDeck));
                         }
                         output.addPOJO(outputNode);
                         break;
@@ -257,13 +257,15 @@ public final class Main {
 
                     case ("endPlayerTurn"):
                         // check if both players played their turns
-                        // check if both players played their turns
                         if (turn != newGame.getStartingPlayer()) {
                             // turn ends & add mana
-                            playerOneMana += numberOfTurns;
-                            playerTwoMana += numberOfTurns;
-                            if (playerOneDeck.isEmpty() != false & playerTwoDeck.isEmpty() != false) {
+                            numberOfRounds++;
+                            playerOneMana += numberOfRounds;
+                            playerTwoMana += numberOfRounds;
+                            if (playerOneDeck.isEmpty() == false) {
                                 playerOneDeckInHand.addLast(playerOneDeck.removeFirst());
+                            }
+                            if (playerTwoDeck.isEmpty() == false) {
                                 playerTwoDeckInHand.addLast(playerTwoDeck.removeFirst());
                             }
                             // don't forget the frozen cards
@@ -274,56 +276,85 @@ public final class Main {
                         } else {
                             turn = 1;
                         }
-                        numberOfTurns++;
                         break;
 
                     case ("placeCard"):
                         handIdx = command.getHandIdx();
-                        Cards cardToPlace;
-                        String cardName;
 
-                        if (turn == 1 && handIdx < playerOneDeckInHand.size()) {
+                        if (turn == 1) {
                             cardToPlace = playerOneDeckInHand.get(handIdx);
                             cardName = cardToPlace.getName();
-                        } else if (turn == 2 && handIdx < playerTwoDeckInHand.size()){
-                            cardToPlace = playerTwoDeckInHand.get(handIdx);
-                            cardName = cardToPlace.getName();
-                        } else {
-                            break;
-                        }
-                        if (cardName.equals("Firestorm") || cardName.equals("Winterfell") || cardName.equals("Heart Hound")) {
-                            outputNode = objectMapper.createObjectNode();
-                            outputNode.put("command", "placeCard");
-                            outputNode.put("handIdx", handIdx);
-                            outputNode.put("output", "Cannot place environment card on table.");
-                            output.addPOJO(outputNode);
-                        } else if (playerOneDeckInHand.get(handIdx).getMana() > playerOneMana) {
-                            outputNode = objectMapper.createObjectNode();
-                            outputNode.put("command", "placeCard");
-                            outputNode.put("handIdx", handIdx);
-                            outputNode.put("output", "Not enough mana to place card on table.");
-                            output.addPOJO(outputNode);
-                        } else {
-                            if (cardName.equals("The Ripper") || cardName.equals("Miraj") ||
-                                    cardName.equals("Goliath") || cardName.equals("Warden")) {
-                                if (turn == 1) {
-                                    playerOneMana -= cardToPlace.getMana();
-                                    playingTable.get(1).add(cardToPlace);
+                            if (cardName.equals("Firestorm") || cardName.equals("Winterfell") || cardName.equals("Heart Hound")) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Cannot place environment card on table.");
+                                outputNode.put("handIdx", handIdx);
+                                output.addPOJO(outputNode);
+                            } else if (playerOneDeckInHand.get(handIdx).getMana() > playerOneMana) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Not enough mana to place card on table.");
+                                outputNode.put("handIdx", handIdx);
+                                output.addPOJO(outputNode);
+                            } else if (cardName.equals("The Ripper") || cardName.equals("Miraj") ||
+                                        cardName.equals("Goliath") || cardName.equals("Warden")) {
+                                if (playingTable.get(2).size() == 4) {
+                                    outputNode = objectMapper.createObjectNode();
+                                    outputNode.put("command", "placeCard");
+                                    outputNode.put("error", "Cannot place card on table since row is full.");
+                                    outputNode.put("handIdx", handIdx);
                                 } else {
-                                    playerTwoMana -= cardToPlace.getMana();
-                                    playingTable.get(2).add(cardToPlace);
+                                    playerOneMana -= cardToPlace.getMana();
+                                    playingTable.get(2).add(playerOneDeckInHand.remove(handIdx));
                                 }
                             } else {
-                                if (turn == 1) {
-                                    playerOneMana -= cardToPlace.getMana();
-                                    playingTable.get(0).add(cardToPlace);
+                                if (playingTable.get(3).size() == 4) {
+                                    outputNode = objectMapper.createObjectNode();
+                                    outputNode.put("command", "placeCard");
+                                    outputNode.put("error", "Cannot place card on table since row is full.");
+                                    outputNode.put("handIdx", handIdx);
                                 } else {
-                                    playingTable.get(3).add(cardToPlace);
+                                    playerOneMana -= cardToPlace.getMana();
+                                    playingTable.get(3).add(playerOneDeckInHand.remove(handIdx));
+                                }
+                            }
+                        } else if (turn == 2) {
+                            cardToPlace = playerTwoDeckInHand.get(handIdx);
+                            cardName = cardToPlace.getName();
+
+                            if (cardName.equals("Firestorm") || cardName.equals("Winterfell") || cardName.equals("Heart Hound")) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Cannot place environment card on table.");
+                                outputNode.put("handIdx", handIdx);
+                            } else if (playerTwoDeckInHand.get(handIdx).getMana() > playerTwoMana) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Not enough mana to place card on table.");
+                                outputNode.put("handIdx", handIdx);
+                            } else if (cardName.equals("The Ripper") || cardName.equals("Miraj") ||
+                                        cardName.equals("Goliath") || cardName.equals("Warden")) {
+                                if (playingTable.get(1).size() == 4) {
+                                    outputNode = objectMapper.createObjectNode();
+                                    outputNode.put("command", "placeCard");
+                                    outputNode.put("error", "Cannot place card on table since row is full.");
+                                    outputNode.put("handIdx", handIdx);
+                                } else {
                                     playerTwoMana -= cardToPlace.getMana();
+                                    playingTable.get(1).add(playerTwoDeckInHand.remove(handIdx));
+                                }
+                            } else {
+                                if (playingTable.get(0).size() == 4) {
+                                    outputNode = objectMapper.createObjectNode();
+                                    outputNode.put("command", "placeCard");
+                                    outputNode.put("error", "Cannot place card on table since row is full.");
+                                    outputNode.put("handIdx", handIdx);
+                                } else {
+                                    playerTwoMana -= cardToPlace.getMana();
+                                    playingTable.get(0).add(playerTwoDeckInHand.remove(handIdx));
                                 }
                             }
                         }
-
                         break;
 
                     case ("cardUsesAttack"):
@@ -362,6 +393,67 @@ public final class Main {
                         affectedRow = command.getAffectedRow();
                         outputNode = objectMapper.createObjectNode();
                         outputNode.put("command", "useEnvironmentCard");
+
+                        if (turn == 1) {
+                            cardToPlace = playerOneDeckInHand.get(handIdx);
+                            cardName = cardToPlace.getName();
+                            if (!cardName.equals("Firestorm") || !cardName.equals("Winterfell") || !cardName.equals("Heart Hound")) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "useEnvironmentCard");
+                                outputNode.put("error", "Chosen card is not of type environment.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                                output.addPOJO(outputNode);
+                            } else if (playerOneDeckInHand.get(handIdx).getMana() > playerOneMana) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Not enough mana to place card on table.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                                output.addPOJO(outputNode);
+                            } else if (affectedRow == 2 || affectedRow == 3) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Chosen row does not belong to the enemy.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                            } else if (cardName.equals("Heart Hound")) {
+
+
+                            } else {
+
+                            }
+                        } else if (turn == 2) {
+                            cardToPlace = playerTwoDeckInHand.get(handIdx);
+                            cardName = cardToPlace.getName();
+                            if (!cardName.equals("Firestorm") || !cardName.equals("Winterfell") || !cardName.equals("Heart Hound")) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "useEnvironmentCard");
+                                outputNode.put("error", "Chosen card is not of type environment.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                                output.addPOJO(outputNode);
+                            } else if (playerTwoDeckInHand.get(handIdx).getMana() > playerTwoMana) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Not enough mana to place card on table.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                                output.addPOJO(outputNode);
+                            } else if (affectedRow == 2 || affectedRow == 3) {
+                                outputNode = objectMapper.createObjectNode();
+                                outputNode.put("command", "placeCard");
+                                outputNode.put("error", "Chosen row does not belong to the enemy.");
+                                outputNode.put("handIdx", handIdx);
+                                outputNode.put("affectedRow", affectedRow);
+                            } else if (cardName.equals("Heart Hound")) {
+
+
+                            } else {
+
+                            }
+                        }
+
                 }
             }
 
