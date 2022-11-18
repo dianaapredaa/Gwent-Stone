@@ -1,5 +1,6 @@
 package main;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import fileio.CardInput;
 import fileio.DecksInput;
 
@@ -11,6 +12,16 @@ public abstract class Cards {
     private String description;
     private ArrayList<String> colors;
     private String name;
+    @JsonIgnore
+    private int isFrozen = 0;
+    @JsonIgnore
+    private int abilityUsed = 0;
+    @JsonIgnore
+    private int attackUsed = 0;
+
+    public int getAttackUsed() {
+        return attackUsed;
+    }
 
     public Cards(int mana, String description, ArrayList<String> colors, String name) {
         this.mana = mana;
@@ -18,6 +29,15 @@ public abstract class Cards {
         this.colors = new ArrayList<>(colors);
         this.name = name;
     }
+
+    public void setAttackUsed(int attackUsed) { this.attackUsed = attackUsed; }
+    public int getAbilityUsed() { return abilityUsed; }
+
+    public void setAbilityUsed(int abilityUsed) { this.abilityUsed = abilityUsed; }
+
+    public int getIsFrozen() { return isFrozen; }
+
+    public void setIsFrozen(int isFrozen) { this.isFrozen = isFrozen; }
 
     public int getMana() {
         return mana;

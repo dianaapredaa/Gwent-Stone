@@ -61,6 +61,10 @@
     "attackDamage" : 2
   }
 }, {
+  "command" : "placeCard",
+  "error" : "Cannot place environment card on table.",
+  "handIdx" : 0
+}, {
   "command" : "useEnvironmentCard",
   "error" : "Chosen card is not of type environment.",
   "handIdx" : 0,
