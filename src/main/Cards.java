@@ -15,8 +15,6 @@ public abstract class Cards {
     @JsonIgnore
     private int isFrozen = 0;
     @JsonIgnore
-    private int abilityUsed = 0;
-    @JsonIgnore
     private int attackUsed = 0;
 
     public int getAttackUsed() {
@@ -31,10 +29,6 @@ public abstract class Cards {
     }
 
     public void setAttackUsed(int attackUsed) { this.attackUsed = attackUsed; }
-    public int getAbilityUsed() { return abilityUsed; }
-
-    public void setAbilityUsed(int abilityUsed) { this.abilityUsed = abilityUsed; }
-
     public int getIsFrozen() { return isFrozen; }
 
     public void setIsFrozen(int isFrozen) { this.isFrozen = isFrozen; }
