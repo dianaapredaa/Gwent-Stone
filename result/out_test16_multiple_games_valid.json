@@ -310,6 +310,8 @@
 }, {
   "command" : 0
 }, {
+  "command" : 0
+}, {
   "command" : "getTotalGamesPlayed",
   "output" : 2
 } ]

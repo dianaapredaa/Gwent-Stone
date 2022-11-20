@@ -139,6 +139,8 @@
 }, {
   "command" : 0
 }, {
+  "command" : 0
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
@@ -338,6 +340,8 @@
 }, {
   "command" : "getTotalGamesPlayed",
   "output" : 2
+}, {
+  "command" : 0
 }, {
   "command" : 0
 } ]
