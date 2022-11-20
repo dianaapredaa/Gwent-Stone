@@ -14,9 +14,9 @@ import java.util.LinkedList;
 public class Debug {
     public Debug() {
     }
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void getCardsInHand(ObjectMapper objectMapper, ArrayNode output,
-                                      ActionsInput command, LinkedList<Cards> playerOneDeckInHand,
+    public static void getCardsInHand(ArrayNode output, ActionsInput command, LinkedList<Cards> playerOneDeckInHand,
                                       LinkedList<Cards> playerTwoDeckInHand) {
         int playerIdx = command.getPlayerIdx();
 
@@ -33,7 +33,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerDeck(ObjectMapper objectMapper, ArrayNode output,
+    public static void getPlayerDeck(ArrayNode output,
                                      ActionsInput command, LinkedList<Cards> playerOneDeck,
                                      LinkedList<Cards> playerTwoDeck) {
         int playerIdx = command.getPlayerIdx();
@@ -44,23 +44,53 @@ public class Debug {
 
         // display player deck
         if (playerIdx == 1) {
-            outputNode.putPOJO("output", new ArrayList<>(playerOneDeck));
+            LinkedList<Cards> playerOneDeckDeepCopy = new LinkedList<>();
+            for (Cards card : playerOneDeck) {
+                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm") || card.getName().equals("Heart Hound")) {
+                    // environment card
+                    playerOneDeckDeepCopy.add(new Environment((Environment) card));
+                } else {
+                    // minion
+                    playerOneDeckDeepCopy.add(new Minion((Minion) card));
+                }
+            }
+            outputNode.putPOJO("output", playerOneDeckDeepCopy);
         } else if (playerIdx == 2) {
-            outputNode.putPOJO("output", new ArrayList<>(playerTwoDeck));
-        }
+            LinkedList<Cards> playerTwoDeckDeepCopy = new LinkedList<>();
+            for (Cards card : playerTwoDeck) {
+                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm") || card.getName().equals("Heart Hound")) {
+                    // environment card
+                    playerTwoDeckDeepCopy.add(new Environment((Environment) card));
+                } else {
+                    // minion
+                    playerTwoDeckDeepCopy.add(new Minion((Minion) card));
+                }
+            }
+            outputNode.putPOJO("output", playerTwoDeckDeepCopy);        }
         output.addPOJO(outputNode);
     }
 
-    public static void getCardsOnTable(ObjectMapper objectMapper, ArrayNode output,
+    public static void getCardsOnTable(ArrayNode output,
                                        ArrayList<LinkedList<Minion>> playingTable) {
         // display playing table
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getCardsOnTable");
-        outputNode.putPOJO("output", playingTable);
+
+        LinkedList<LinkedList<Minion>> tableDeepCopy = new LinkedList<>();
+
+        for (LinkedList<Minion> row : playingTable) {
+            LinkedList<Minion> rowDeepCopy = new LinkedList<>();
+            for (Minion minion : row) {
+                rowDeepCopy.add(new Minion(minion));
+            }
+            tableDeepCopy.add(rowDeepCopy);
+        }
+
+        outputNode.putPOJO("output", tableDeepCopy);
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerTurn(ObjectMapper objectMapper, ArrayNode output, int turn) {
+    public static void getPlayerTurn(ArrayNode output, int turn) {
         // display player turn
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getPlayerTurn");
@@ -68,7 +98,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerHero(ObjectMapper objectMapper, ArrayNode output,
+    public static void getPlayerHero(ArrayNode output,
                                      ActionsInput command, Hero playerOneHero,
                                      Hero playerTwoHero) {
         int playerIdx = command.getPlayerIdx();
@@ -85,7 +115,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getCardsAtPosition(ObjectMapper objectMapper, ArrayNode output,
+    public static void getCardsAtPosition(ArrayNode output,
                                           ActionsInput command, ArrayList<LinkedList<Minion>> playingTable) {
         int x = command.getX();
         int y = command.getY();
@@ -103,7 +133,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerMana(ObjectMapper objectMapper, ArrayNode output,
+    public static void getPlayerMana(ArrayNode output,
                                      ActionsInput command, int playerOneMana, int playerTwoMana) {
         int playerIdx = command.getPlayerIdx();
         ObjectNode outputNode = objectMapper.createObjectNode();
@@ -119,7 +149,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getEnvironmentCardsInHand(ObjectMapper objectMapper, ArrayNode output,
+    public static void getEnvironmentCardsInHand(ArrayNode output,
                                                  ActionsInput command,
                                                  LinkedList<Cards> playerOneDeckInHand,
                                                  LinkedList<Cards> playerTwoDeckInHand ) {
@@ -151,7 +181,7 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getFrozenCardsOnTable(ObjectMapper objectMapper, ArrayNode output,
+    public static void getFrozenCardsOnTable(ArrayNode output,
                                              ActionsInput command,
                                              ArrayList<LinkedList<Minion>> playingTable) {
         LinkedList<Minion> frozenCardsOnTable = new LinkedList<>();

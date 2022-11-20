@@ -11,7 +11,7 @@
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
-    "health" : 4,
+    "health" : 5,
     "attackDamage" : 5
   } ]
 }, {
@@ -93,8 +93,8 @@
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Brown", "Black", "Grey" ],
     "name" : "Goliath",
-    "health" : 7,
-    "attackDamage" : 2
+    "health" : 4,
+    "attackDamage" : 4
   }, {
     "mana" : 3,
     "description" : "Standard card: Death incarnate. No better time to die than now.",
@@ -114,7 +114,7 @@
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
-    "health" : 4,
+    "health" : 5,
     "attackDamage" : 5
   }, {
     "mana" : 3,
@@ -128,7 +128,7 @@
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
-    "health" : 4,
+    "health" : 0,
     "attackDamage" : 5
   } ], [ {
     "mana" : 2,

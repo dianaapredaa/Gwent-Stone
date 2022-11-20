@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Gameplay {
-    public static void placeCard(ObjectMapper objectMapper, ArrayNode output,
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static void placeCard(ArrayNode output,
                                  ActionsInput command, int turn,
                                  ArrayList<LinkedList<Minion>> playingTable,
                                  LinkedList<Cards> playerOneDeckInHand,

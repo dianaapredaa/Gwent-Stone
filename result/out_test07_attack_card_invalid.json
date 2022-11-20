@@ -1,8 +1,30 @@
 [ {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 3,
+    "y" : 0
+  },
+  "cardAttacked" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacker card has already attacked this turn."
+}, {
   "command" : "getCardAtPosition",
   "x" : 0,
   "y" : 3,
   "output" : "No card available at that position."
+}, {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "cardAttacked" : {
+    "x" : 3,
+    "y" : 0
+  },
+  "error" : "Attacker card has already attacked this turn."
 }, {
   "command" : "getCardAtPosition",
   "x" : 3,
@@ -45,6 +67,17 @@
     "health" : 4,
     "attackDamage" : 0
   }
+}, {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 3,
+    "y" : 0
+  },
+  "cardAttacked" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacker card has already attacked this turn."
 }, {
   "command" : "cardUsesAttack",
   "cardAttacker" : {

@@ -89,6 +89,17 @@
   "playerIdx" : 2,
   "output" : [ ]
 }, {
+  "command" : "cardUsesAttack",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 1
+  },
+  "cardAttacked" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card does not belong to the current player."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 3

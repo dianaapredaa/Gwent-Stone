@@ -127,6 +127,10 @@ class Environment extends Cards {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
                 cardInput.getName());
     }
+
+    Environment(Environment environment) {
+        super(environment.getMana(), environment.getDescription(), environment.getColors(), environment.getName());
+    }
 }
 
 class Minion extends Cards {
