@@ -18,13 +18,11 @@ public class Debug {
                                       LinkedList<Cards> playerTwoDeckInHand) {
         int playerIdx = command.getPlayerIdx();
         ObjectNode outputNode = objectMapper.createObjectNode();
+        outputNode.put("command", "getCardsInHand");
+        outputNode.put("playerIdx", command.getPlayerIdx());
         if (playerIdx == 1) {
-            outputNode.put("command", "getCardsInHand");
-            outputNode.put("playerIdx", command.getPlayerIdx());
             outputNode.putPOJO("output", new ArrayList<>(playerOneDeckInHand));
         } else if (playerIdx == 2) {
-            outputNode.put("command", "getCardsInHand");
-            outputNode.put("playerIdx", command.getPlayerIdx());
             outputNode.putPOJO("output", new ArrayList<>(playerTwoDeckInHand));
         }
         output.addPOJO(outputNode);

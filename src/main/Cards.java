@@ -13,9 +13,9 @@ public abstract class Cards {
     private ArrayList<String> colors;
     private String name;
     @JsonIgnore
-    private int isFrozen = 0;
+    private int isFrozen;
     @JsonIgnore
-    private int attackUsed = 0;
+    private int attackUsed;
 
     public int getAttackUsed() {
         return attackUsed;
@@ -26,12 +26,21 @@ public abstract class Cards {
         this.description = description;
         this.colors = new ArrayList<>(colors);
         this.name = name;
+        this.isFrozen = 0;
+        this.attackUsed = 0;
     }
 
-    public void setAttackUsed(int attackUsed) { this.attackUsed = attackUsed; }
-    public int getIsFrozen() { return isFrozen; }
+    public void setAttackUsed(int attackUsed) {
+        this.attackUsed = attackUsed;
+    }
 
-    public void setIsFrozen(int isFrozen) { this.isFrozen = isFrozen; }
+    public int getIsFrozen() {
+        return isFrozen;
+    }
+
+    public void setIsFrozen(int isFrozen) {
+        this.isFrozen = isFrozen;
+    }
 
     public int getMana() {
         return mana;
@@ -72,12 +81,15 @@ public abstract class Cards {
             LinkedList<Cards> deck = new LinkedList<>();
             for (int j = 0; j < cardInputsDeck.size(); j++) {
                 String name = cardInputsDeck.get(j).getName();
-                if (name.equals("The Ripper") || name.equals("Miraj") || name.equals("The Cursed One") ||
-                        name.equals("Disciple") || name.equals("Sentinel") || name.equals("Berserker") ||
-                        name.equals("Goliath") || name.equals("Warden")) {
+                if (name.equals("The Ripper") || name.equals("Miraj")
+                        || name.equals("The Cursed One")
+                        || name.equals("Disciple") || name.equals("Sentinel")
+                        || name.equals("Berserker") || name.equals("Goliath")
+                        || name.equals("Warden")) {
                     Minion minion = new Minion(cardInputsDeck.get(j));
                     deck.addLast(minion);
-                } else if (name.equals("Firestorm") || name.equals("Winterfell") || name.equals("Heart Hound")) {
+                } else if (name.equals("Firestorm") || name.equals("Winterfell")
+                        || name.equals("Heart Hound")) {
                     Environment environment = new Environment(cardInputsDeck.get(j));
                     deck.addLast(environment);
                 }
@@ -91,7 +103,7 @@ public abstract class Cards {
 
 class Hero extends Cards {
 
-    private int health = 30;
+    private int health;
 
     public int getHealth() {
         return health;
@@ -102,7 +114,8 @@ class Hero extends Cards {
     }
 
     public Hero(CardInput cardInput) {
-        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(), cardInput.getName());
+        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
+                cardInput.getName());
         this.health = 30;
     }
 }
@@ -110,7 +123,8 @@ class Hero extends Cards {
 class Environment extends Cards {
 
     public Environment(CardInput cardInput) {
-        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(), cardInput.getName());
+        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
+                cardInput.getName());
     }
 }
 
@@ -135,11 +149,17 @@ class Minion extends Cards {
     private int attackDamage;
 
     public Minion(CardInput cardInput) {
-        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(), cardInput.getName());
+        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
+                cardInput.getName());
         this.health = cardInput.getHealth();
         this.attackDamage = cardInput.getAttackDamage();
     }
 
+    public Minion(Minion minion) {
+        super(minion.getMana(), minion.getDescription(), minion.getColors(), minion.getName());
+        this.health = minion.getHealth();
+        this.attackDamage = minion.getAttackDamage();
+    }
 
 }
 
@@ -214,7 +234,8 @@ class Winterfell extends Environment {
 }
 
 class HeartHound extends Environment {
-    // Se fură minionul adversarului cu cea mai mare viață de pe rând și se pune pe rândul “oglindit” aferent jucătorului.
+    // Se fură minionul adversarului cu cea mai mare viață de pe rând și se pune pe rândul
+    // “oglindit” aferent jucătorului.
     public HeartHound(CardInput cardInput) {
         super(cardInput);
     }
