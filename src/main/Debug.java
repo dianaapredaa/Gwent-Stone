@@ -135,9 +135,9 @@ public class Debug {
 
         // display player hero
         if (playerIdx == 1) {
-            outputNode.putPOJO("output", playerOneHero);
+            outputNode.putPOJO("output", new Hero(playerOneHero));
         } else {
-            outputNode.putPOJO("output", playerTwoHero);
+            outputNode.putPOJO("output", new Hero(playerTwoHero));
         }
         output.addPOJO(outputNode);
     }
@@ -188,19 +188,19 @@ public class Debug {
 
         // check for environment cards
         if (playerIdx == 1) {
-            for (Cards cards : playerOneDeckInHand) {
-                if (cards.getName().equals("Firestorm")
-                        || cards.getName().equals("HeartHound")
-                        || cards.getName().equals("Winterfell")) {
-                    environmentCards.add(cards);
+            for (Cards card : playerOneDeckInHand) {
+                if (card.getName().equals("Firestorm")
+                        || card.getName().equals("Heart Hound")
+                        || card.getName().equals("Winterfell")) {
+                    environmentCards.add(new Environment((Environment) card));
                 }
             }
         } else if (playerIdx == 2) {
-            for (Cards cards : playerTwoDeckInHand) {
-                if (cards.getName().equals("Firestorm")
-                        || cards.getName().equals("HeartHound")
-                        || cards.getName().equals("Winterfell")) {
-                    environmentCards.add(cards);
+            for (Cards card : playerTwoDeckInHand) {
+                if (card.getName().equals("Firestorm")
+                        || card.getName().equals("Heart Hound")
+                        || card.getName().equals("Winterfell")) {
+                    environmentCards.add(new Environment((Environment) card));
                 }
             }
         }

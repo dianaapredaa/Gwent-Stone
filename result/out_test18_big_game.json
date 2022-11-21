@@ -25,7 +25,12 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
@@ -35,7 +40,12 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getFrozenCardsOnTable",
   "output" : [ ]
@@ -64,7 +74,12 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -95,7 +110,12 @@
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
@@ -120,7 +140,7 @@
     "x" : 0,
     "y" : 0
   },
-  "error" : "Attacked card is not of type 'Tank’."
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
@@ -133,7 +153,7 @@
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
-    "health" : 2,
+    "health" : 3,
     "attackDamage" : 5
   }
 }, {
@@ -142,11 +162,21 @@
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
-  "output" : 8
+  "output" : 5
 }, {
   "command" : "getEnvironmentCardsInHand",
   "playerIdx" : 1,
-  "output" : [ ]
+  "output" : [ {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Red", "White", "Grey" ],
+    "name" : "Heart Hound"
+  }, {
+    "mana" : 2,
+    "description" : "Premium card: Your mind is ours. Your body is ours. Stop begging.",
+    "colors" : [ "Green", "Black" ],
+    "name" : "Heart Hound"
+  } ]
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
@@ -165,10 +195,12 @@
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 4
+  "output" : 1
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
+}, {
+  "gameEnded" : "Player one killed the enemy hero."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -177,7 +209,7 @@
     "colors" : [ "Purple", "Yellow" ],
     "name" : "Berserker",
     "health" : 5,
-    "attackDamage" : 2
+    "attackDamage" : 3
   } ], [ {
     "mana" : 4,
     "description" : "Premium card: Ravished by the winds of hell, no soul is to be forgiven.",
@@ -204,21 +236,21 @@
     "description" : "Premium card: Insanity is always an option, now it is an absolute.",
     "colors" : [ "Red", "Black" ],
     "name" : "Miraj",
-    "health" : 2,
+    "health" : 3,
     "attackDamage" : 5
   }, {
     "mana" : 3,
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Brown", "Black", "Grey" ],
     "name" : "Goliath",
-    "health" : 2,
+    "health" : 3,
     "attackDamage" : 1
   }, {
     "mana" : 5,
     "description" : "Standard card: When he is near, close your eyes. They betray your mind.",
     "colors" : [ "Yellow", "Orange", "Red" ],
     "name" : "Miraj",
-    "health" : 3,
+    "health" : 4,
     "attackDamage" : 4
   }, {
     "mana" : 3,
@@ -232,7 +264,7 @@
     "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
     "colors" : [ "Black", "Grey", "Blue" ],
     "name" : "Sentinel",
-    "health" : 2,
+    "health" : 3,
     "attackDamage" : 1
   } ] ]
 }, {
@@ -271,7 +303,9 @@
   "command" : "getTotalGamesPlayed",
   "output" : 1
 }, {
-  "command" : 0
+  "command" : "getPlayerTwoWins",
+  "output" : 0
 }, {
-  "command" : 0
+  "command" : "getPlayerOneWins",
+  "output" : 1
 } ]

@@ -17,14 +17,14 @@ public class Statistics {
     public static void getPlayerOneWins(ArrayNode output, int playerOneWins) {
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getPlayerOneWins");
-        outputNode.put("command", playerOneWins);
+        outputNode.put("output", playerOneWins);
         output.addPOJO(outputNode);
     }
 
     public static void getPlayerTwoWins(ArrayNode output, int playerTwoWins) {
         ObjectNode outputNode = objectMapper.createObjectNode();
-        outputNode.put("command", "getPlayerOneWins");
-        outputNode.put("command", playerTwoWins);
+        outputNode.put("command", "getPlayerTwoWins");
+        outputNode.put("output", playerTwoWins);
         output.addPOJO(outputNode);
     }
 }
