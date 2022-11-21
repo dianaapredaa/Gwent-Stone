@@ -251,13 +251,13 @@ class Minion extends Cards {
 //    }
 //}
 //
-//class LordRoyce extends Hero {
-//    // Sub-Zero: îngheață cartea cu cel mai mare atac de pe rând.
-//
-//    public LordRoyce(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
+class LordRoyce extends Hero {
+    // Sub-Zero: îngheață cartea cu cel mai mare atac de pe rând.
+
+    public LordRoyce(CardInput cardInput) {
+        super(cardInput);
+    }
+}
 //
 //class EmpressThorina extends Hero {
 //    // Low Blow: distruge cartea cu cea mai mare viață de pe rând.
