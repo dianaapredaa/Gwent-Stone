@@ -1,24 +1,28 @@
 package main;
 
-import checker.CheckerConstants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.ActionsInput;
-import fileio.Input;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class Debug {
-    public Debug() {
+public final class Debug {
+    private Debug() {
     }
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void getCardsInHand(ArrayNode output, ActionsInput command,
-                                      LinkedList<Cards> playerOneDeckInHand,
-                                      LinkedList<Cards> playerTwoDeckInHand) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playerOneDeckInHand
+     * @param playerTwoDeckInHand
+     */
+    public static void getCardsInHand(final ArrayNode output, final ActionsInput command,
+                                      final LinkedList<Cards> playerOneDeckInHand,
+                                      final LinkedList<Cards> playerTwoDeckInHand) {
         int playerIdx = command.getPlayerIdx();
 
         ObjectNode outputNode = objectMapper.createObjectNode();
@@ -59,9 +63,16 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerDeck(ArrayNode output, ActionsInput command,
-                                     LinkedList<Cards> playerOneDeck,
-                                     LinkedList<Cards> playerTwoDeck) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playerOneDeck
+     * @param playerTwoDeck
+     */
+    public static void getPlayerDeck(final ArrayNode output, final ActionsInput command,
+                                     final LinkedList<Cards> playerOneDeck,
+                                     final LinkedList<Cards> playerTwoDeck) {
         int playerIdx = command.getPlayerIdx();
 
         ObjectNode outputNode = objectMapper.createObjectNode();
@@ -94,12 +105,18 @@ public class Debug {
                     playerTwoDeckDeepCopy.add(new Minion((Minion) card));
                 }
             }
-            outputNode.putPOJO("output", playerTwoDeckDeepCopy);        }
+            outputNode.putPOJO("output", playerTwoDeckDeepCopy);
+        }
         output.addPOJO(outputNode);
     }
 
-    public static void getCardsOnTable(ArrayNode output,
-                                       ArrayList<LinkedList<Minion>> playingTable) {
+    /**
+     *
+     * @param output
+     * @param playingTable
+     */
+    public static void getCardsOnTable(final ArrayNode output,
+                                       final ArrayList<LinkedList<Minion>> playingTable) {
         // display playing table
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getCardsOnTable");
@@ -118,7 +135,12 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerTurn(ArrayNode output, int turn) {
+    /**
+     *
+     * @param output
+     * @param turn
+     */
+    public static void getPlayerTurn(final ArrayNode output, final int turn) {
         // display player turn
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getPlayerTurn");
@@ -126,8 +148,15 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerHero(ArrayNode output, ActionsInput command,
-                                     Hero playerOneHero, Hero playerTwoHero) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playerOneHero
+     * @param playerTwoHero
+     */
+    public static void getPlayerHero(final ArrayNode output, final ActionsInput command,
+                                     final Hero playerOneHero, final Hero playerTwoHero) {
         int playerIdx = command.getPlayerIdx();
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getPlayerHero");
@@ -142,8 +171,14 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getCardsAtPosition(ArrayNode output, ActionsInput command,
-                                          ArrayList<LinkedList<Minion>> playingTable) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playingTable
+     */
+    public static void getCardsAtPosition(final ArrayNode output, final ActionsInput command,
+                                          final ArrayList<LinkedList<Minion>> playingTable) {
         int x = command.getX();
         int y = command.getY();
         ObjectNode outputNode = objectMapper.createObjectNode();
@@ -160,8 +195,15 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getPlayerMana(ArrayNode output, ActionsInput command,
-                                     int playerOneMana, int playerTwoMana) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playerOneMana
+     * @param playerTwoMana
+     */
+    public static void getPlayerMana(final ArrayNode output, final ActionsInput command,
+                                     final int playerOneMana, final int playerTwoMana) {
         int playerIdx = command.getPlayerIdx();
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getPlayerMana");
@@ -176,9 +218,16 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getEnvironmentCardsInHand(ArrayNode output, ActionsInput command,
-                                                 LinkedList<Cards> playerOneDeckInHand,
-                                                 LinkedList<Cards> playerTwoDeckInHand ) {
+    /**
+     *
+     * @param output
+     * @param command
+     * @param playerOneDeckInHand
+     * @param playerTwoDeckInHand
+     */
+    public static void getEnvironmentCardsInHand(final ArrayNode output, final ActionsInput command,
+                                                 final LinkedList<Cards> playerOneDeckInHand,
+                                                 final LinkedList<Cards> playerTwoDeckInHand) {
         int playerIdx = command.getPlayerIdx();
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getEnvironmentCardsInHand");
@@ -207,16 +256,23 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getFrozenCardsOnTable(ArrayNode output,
-                                             ArrayList<LinkedList<Minion>> playingTable) {
+    /**
+     *
+     * @param output
+     * @param playingTable
+     */
+    public static void getFrozenCardsOnTable(final ArrayNode output,
+                                             final ArrayList<LinkedList<Minion>> playingTable) {
         LinkedList<Minion> frozenCardsOnTable = new LinkedList<>();
 
         // check if card is frozen
-        for (LinkedList<Minion> minions : playingTable)
-            for (Minion minion : minions)
-                if (minion.getIsFrozen() == 1)
+        for (LinkedList<Minion> minions : playingTable) {
+            for (Minion minion : minions) {
+                if (minion.getIsFrozen() == 1) {
                     frozenCardsOnTable.add(new Minion(minion));
-
+                }
+            }
+        }
         ObjectNode outputNode = objectMapper.createObjectNode();
         outputNode.put("command", "getFrozenCardsOnTable");
         outputNode.putPOJO("output", frozenCardsOnTable);

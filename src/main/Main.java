@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.*;
 
 import java.io.File;
@@ -180,10 +179,10 @@ public final class Main {
                             playerTwoHero, newGame, a);
                     case ("placeCard") -> Gameplay.placeCard(output, command, a.getTurn(),
                             playingTable, playerOneDeckInHand, playerTwoDeckInHand, a);
-                    case ("cardUsesAttack") -> Gameplay.cardUsesAttack(output, command, playingTable,
-                            a.getTurn());
-                    case ("cardUsesAbility") -> Gameplay.cardUsesAbility(output, command, playingTable,
-                            a.getTurn());
+                    case ("cardUsesAttack") -> Gameplay.cardUsesAttack(output, command,
+                            playingTable, a.getTurn());
+                    case ("cardUsesAbility") -> Gameplay.cardUsesAbility(output, command,
+                            playingTable, a.getTurn());
                     case ("useAttackHero") ->
                             Gameplay.cardAttackHero(output, command, playingTable, a.getTurn(), a,
                                     playerOneHero, playerTwoHero);
@@ -193,6 +192,7 @@ public final class Main {
                     case ("useEnvironmentCard") ->
                             Gameplay.useEnvironmentCard(output, command, playerOneDeckInHand,
                                     playerTwoDeckInHand, playingTable, a, a.getTurn());
+                    default -> System.out.println("Nothing to do here");
                 }
             }
 

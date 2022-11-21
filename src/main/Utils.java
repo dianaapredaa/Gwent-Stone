@@ -9,23 +9,23 @@ public final class Utils {
         return playerOneMana;
     }
 
-    public void setPlayerOneMana(int playerOneMana) {
+    public void setPlayerOneMana(final int playerOneMana) {
         this.playerOneMana = playerOneMana;
     }
 
     public int getPlayerTwoMana() {
-        return PlayerTwoMana;
+        return playerTwoMana;
     }
 
-    public void setPlayerTwoMana(int playerTwoMana) {
-        PlayerTwoMana = playerTwoMana;
+    public void setPlayerTwoMana(final int playerTwoMana) {
+        this.playerTwoMana = playerTwoMana;
     }
 
     public int getTurn() {
         return turn;
     }
 
-    public void setTurn(int turn) {
+    public void setTurn(final int turn) {
         this.turn = turn;
     }
 
@@ -33,7 +33,7 @@ public final class Utils {
         return playerOneWins;
     }
 
-    public void setPlayerOneWins(int playerOneWins) {
+    public void setPlayerOneWins(final int playerOneWins) {
         this.playerOneWins = playerOneWins;
     }
 
@@ -41,7 +41,7 @@ public final class Utils {
         return playerTwoWins;
     }
 
-    public void setPlayerTwoWins(int playerTwoWins) {
+    public void setPlayerTwoWins(final int playerTwoWins) {
         this.playerTwoWins = playerTwoWins;
     }
 
@@ -49,18 +49,24 @@ public final class Utils {
         return numberOfRounds;
     }
 
-    public void setNumberOfRounds(int numberOfRounds) {
+    public void setNumberOfRounds(final int numberOfRounds) {
         this.numberOfRounds = numberOfRounds;
     }
 
 
     private int playerOneMana = 1;
-    private int PlayerTwoMana = 1;
+    private int playerTwoMana = 1;
     private int turn = 0;
     private int playerOneWins = 0;
     private int playerTwoWins = 0;
     private int numberOfRounds = 0;
 
+    /**
+     *
+     * @param playingTable
+     * @param turn
+     * @return
+     */
     public static int isTank(final ArrayList<LinkedList<Minion>> playingTable, final int turn) {
         int isTank = 0;
         for (int k = 0; k < playingTable.get(turn).size(); k++) {

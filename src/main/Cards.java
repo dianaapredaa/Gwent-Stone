@@ -17,11 +17,8 @@ public abstract class Cards {
     @JsonIgnore
     private int attackUsed;
 
-    public int getAttackUsed() {
-        return attackUsed;
-    }
-
-    public Cards(int mana, String description, ArrayList<String> colors, String name) {
+    public Cards(final int mana, final String description, final ArrayList<String> colors,
+                 final String name) {
         this.mana = mana;
         this.description = description;
         this.colors = new ArrayList<>(colors);
@@ -30,51 +27,108 @@ public abstract class Cards {
         this.attackUsed = 0;
     }
 
-    public void setAttackUsed(int attackUsed) {
+    /**
+     *
+     * @return
+     */
+    public int getAttackUsed() {
+        return attackUsed;
+    }
+
+    /**
+     *
+     * @param attackUsed
+     */
+    public void setAttackUsed(final int attackUsed) {
         this.attackUsed = attackUsed;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getIsFrozen() {
         return isFrozen;
     }
 
-    public void setIsFrozen(int isFrozen) {
+    /**
+     *
+     * @param isFrozen
+     */
+    public void setIsFrozen(final int isFrozen) {
         this.isFrozen = isFrozen;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMana() {
         return mana;
     }
 
-    public void setMana(int mana) {
+    /**
+     *
+     * @param mana
+     */
+    public void setMana(final int mana) {
         this.mana = mana;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    /**
+     *
+     * @param description
+     */
+    public void setDescription(final String description) {
         this.description = description;
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getColors() {
         return colors;
     }
 
-    public void setColors(ArrayList<String> colors) {
+    /**
+     *
+     * @param colors
+     */
+    public void setColors(final ArrayList<String> colors) {
         this.colors = colors;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    /**
+     *
+     * @param name
+     */
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public static LinkedList<LinkedList<Cards>> setCardType(DecksInput decksInput) {
+    /**
+     *
+     * @param decksInput
+     * @return
+     */
+    public static LinkedList<LinkedList<Cards>> setCardType(final DecksInput decksInput) {
         LinkedList<LinkedList<Cards>> deckOfDecks = new LinkedList<>();
         for (int i = 0; i < decksInput.getDecks().size(); i++) {
             ArrayList<CardInput> cardInputsDeck = decksInput.getDecks().get(i);
@@ -105,7 +159,7 @@ class Hero extends Cards {
 
     private int health;
 
-    public Hero(Hero hero) {
+    Hero(final Hero hero) {
         super(hero.getMana(), hero.getDescription(), hero.getColors(), hero.getName());
         this.setHealth(hero.health);
     }
@@ -114,11 +168,11 @@ class Hero extends Cards {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(final int health) {
         this.health = health;
     }
 
-    public Hero(CardInput cardInput) {
+    Hero(final CardInput cardInput) {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
                 cardInput.getName());
         // set initial health at 30
@@ -128,13 +182,14 @@ class Hero extends Cards {
 
 class Environment extends Cards {
 
-    public Environment(CardInput cardInput) {
+    Environment(final CardInput cardInput) {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
                 cardInput.getName());
     }
 
-    Environment(Environment environment) {
-        super(environment.getMana(), environment.getDescription(), environment.getColors(), environment.getName());
+    Environment(final Environment environment) {
+        super(environment.getMana(), environment.getDescription(),
+                environment.getColors(), environment.getName());
     }
 }
 
@@ -143,7 +198,7 @@ class Minion extends Cards {
         return health;
     }
 
-    public void setHealth(int health) {
+    public void setHealth(final int health) {
         this.health = health;
     }
 
@@ -151,131 +206,24 @@ class Minion extends Cards {
         return attackDamage;
     }
 
-    public void setAttackDamage(int attackDamage) {
+    public void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
     private int health;
     private int attackDamage;
 
-    public Minion(CardInput cardInput) {
+    Minion(final CardInput cardInput) {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
                 cardInput.getName());
         this.health = cardInput.getHealth();
         this.attackDamage = cardInput.getAttackDamage();
     }
 
-    public Minion(Minion minion) {
+    Minion(final Minion minion) {
         super(minion.getMana(), minion.getDescription(), minion.getColors(), minion.getName());
         this.health = minion.getHealth();
         this.attackDamage = minion.getAttackDamage();
     }
 
 }
-
-//class TheRipper extends Minion {
-//    // Weak Knees: -2 atac pentru un minion din tabăra adversă.
-//    // atac diferit de 0
-//    public TheRipper(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//
-//}
-//class Miraj extends Minion {
-//    // Skyjack: face swap între viața lui și viața unui minion din tabăra adversă.
-//    // atac diferit de 0
-//    public Miraj(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class TheCursedOne extends Minion {
-//    // Shapeshift: face swap între viața unui minion din tabăra adversă și atacul aceluiași minion
-//    // atac 0
-//    public TheCursedOne(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Disciple extends Minion {
-//    // God's Plan: +2 viață pentru un minion din tabăra lui.
-//    // atac 0
-//    public Disciple(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Sentinel extends Minion {
-//    public Sentinel(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Berserker extends Minion {
-//    public Berserker(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Goliath extends Minion {
-//    public Goliath(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Warden extends Minion {
-//    public Warden(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Firestorm extends Environment {
-//    // Scade cu 1 viața tuturor minionilor de pe rând.
-//    public Firestorm(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class Winterfell extends Environment {
-//    // Toate cărțile de pe rând stau o tură.
-//    public Winterfell(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class HeartHound extends Environment {
-//    // Se fură minionul adversarului cu cea mai mare viață de pe rând și se pune pe rândul
-//    // “oglindit” aferent jucătorului.
-//    public HeartHound(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-class LordRoyce extends Hero {
-    // Sub-Zero: îngheață cartea cu cel mai mare atac de pe rând.
-
-    public LordRoyce(CardInput cardInput) {
-        super(cardInput);
-    }
-}
-//
-//class EmpressThorina extends Hero {
-//    // Low Blow: distruge cartea cu cea mai mare viață de pe rând.
-//    public EmpressThorina(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class KingMudface extends Hero {
-//    // Earth Born: +1 viață pentru toate cărțile de pe rând.
-//    public KingMudface(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
-//
-//class GeneralKocioraw extends  Hero {
-//    // Blood Thirst: +1 atac pentru toate cărțile de pe rând.
-//    public GeneralKocioraw(CardInput cardInput) {
-//        super(cardInput);
-//    }
-//}
