@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public abstract class Cards {
+    public static final int INITIAL_HEALTH = 30;
     private int mana;
     private String description;
     private ArrayList<String> colors;
@@ -176,7 +177,7 @@ class Hero extends Cards {
         super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
                 cardInput.getName());
         // set initial health at 30
-        this.health = 30;
+        this.health = INITIAL_HEALTH;
     }
 }
 

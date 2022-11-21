@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 public final class Gameplay {
     private static ObjectMapper objectMapper = new ObjectMapper();
+    public static final int MAX_SIZE = 5;
 
     private Gameplay() {
     }
@@ -48,7 +49,7 @@ public final class Gameplay {
                 output.addPOJO(outputNode);
             } else if (cardName.equals("The Ripper") || cardName.equals("Miraj")
                     || cardName.equals("Goliath") || cardName.equals("Warden")) {
-                if (playingTable.get(2).size() == 5) {
+                if (playingTable.get(2).size() == MAX_SIZE) {
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("command", "placeCard");
                     outputNode.put("error", "Cannot place card on table since row is full.");
@@ -59,7 +60,7 @@ public final class Gameplay {
                     playingTable.get(2).addLast((Minion) playerOneDeckInHand.remove(handIdx));
                 }
             } else {
-                if (playingTable.get(3).size() == 5) {
+                if (playingTable.get(3).size() == MAX_SIZE) {
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("command", "placeCard");
                     outputNode.put("error", "Cannot place card on table since row is full.");
@@ -89,7 +90,7 @@ public final class Gameplay {
                 output.addPOJO(outputNode);
             } else if (cardName.equals("The Ripper") || cardName.equals("Miraj")
                     || cardName.equals("Goliath") || cardName.equals("Warden")) {
-                if (playingTable.get(1).size() == 5) {
+                if (playingTable.get(1).size() == MAX_SIZE) {
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("command", "placeCard");
                     outputNode.put("error", "Cannot place card on table since row is full.");
@@ -100,7 +101,7 @@ public final class Gameplay {
                     playingTable.get(1).addLast((Minion) playerTwoDeckInHand.remove(handIdx));
                 }
             } else {
-                if (playingTable.get(0).size() == 5) {
+                if (playingTable.get(0).size() == MAX_SIZE) {
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("command", "placeCard");
                     outputNode.put("error", "Cannot place card on table since row is full.");
@@ -609,10 +610,10 @@ public final class Gameplay {
             outputNode.put("affectedRow", affectedRow);
             output.addPOJO(outputNode);
         } else if (cardName.equals("Heart Hound")) {
-            if ((turn == 1 && affectedRow == 1 && playingTable.get(2).size() == 5)
-                    || (turn == 1 && affectedRow == 0 && playingTable.get(3).size() == 5)
-                    || (turn == 2 && affectedRow == 2 && playingTable.get(1).size() == 5)
-                    || (turn == 2 && affectedRow == 3 && playingTable.get(0).size() == 5)) {
+            if ((turn == 1 && affectedRow == 1 && playingTable.get(2).size() == MAX_SIZE)
+                    || (turn == 1 && affectedRow == 0 && playingTable.get(3).size() == MAX_SIZE)
+                    || (turn == 2 && affectedRow == 2 && playingTable.get(1).size() == MAX_SIZE)
+                    || (turn == 2 && affectedRow == 3 && playingTable.get(0).size() == MAX_SIZE)) {
                 ObjectNode outputNode = objectMapper.createObjectNode();
                 outputNode.put("command", "useEnvironmentCard");
                 outputNode.put("error", "Cannot steal enemy card since the player's row is full.");

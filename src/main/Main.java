@@ -19,6 +19,8 @@ import java.util.*;
  * The entry point to this homework. It runs the checker that tests your implementation.
  */
 public final class Main {
+
+    public static final int INITIAL_CAPACITY = 4;
     /**
      * for coding style
      */
@@ -128,7 +130,7 @@ public final class Main {
             playerTwoDeckInHand.addLast(playerTwoDeck.removeFirst());
 
             // initializing playing Table (4 x 5)
-            ArrayList<LinkedList<Minion>> playingTable = new ArrayList<>(4);
+            ArrayList<LinkedList<Minion>> playingTable = new ArrayList<>(INITIAL_CAPACITY);
 
             LinkedList<Minion> row0 = new LinkedList<>();
             LinkedList<Minion> row1 = new LinkedList<>();
