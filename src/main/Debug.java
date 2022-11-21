@@ -16,7 +16,8 @@ public class Debug {
     }
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static void getCardsInHand(ArrayNode output, ActionsInput command, LinkedList<Cards> playerOneDeckInHand,
+    public static void getCardsInHand(ArrayNode output, ActionsInput command,
+                                      LinkedList<Cards> playerOneDeckInHand,
                                       LinkedList<Cards> playerTwoDeckInHand) {
         int playerIdx = command.getPlayerIdx();
 
@@ -24,11 +25,35 @@ public class Debug {
         outputNode.put("command", "getCardsInHand");
         outputNode.put("playerIdx", command.getPlayerIdx());
 
+        LinkedList<Cards> playerOneDeckInHandDeepCopy = new LinkedList<>();
+        for (Cards card : playerOneDeckInHand) {
+            if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm")
+                    || card.getName().equals("Heart Hound")) {
+                // environment card
+                playerOneDeckInHandDeepCopy.add(new Environment((Environment) card));
+            } else {
+                // minion
+                playerOneDeckInHandDeepCopy.add(new Minion((Minion) card));
+            }
+        }
+
+        LinkedList<Cards> playerTwoDeckInHandDeepCopy = new LinkedList<>();
+        for (Cards card : playerTwoDeckInHand) {
+            if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm")
+                    || card.getName().equals("Heart Hound")) {
+                // environment card
+                playerTwoDeckInHandDeepCopy.add(new Environment((Environment) card));
+            } else {
+                // minion
+                playerTwoDeckInHandDeepCopy.add(new Minion((Minion) card));
+            }
+        }
+
         // display cards in hand
         if (playerIdx == 1) {
-            outputNode.putPOJO("output", new ArrayList<>(playerOneDeckInHand));
+            outputNode.putPOJO("output", playerOneDeckInHandDeepCopy);
         } else if (playerIdx == 2) {
-            outputNode.putPOJO("output", new ArrayList<>(playerTwoDeckInHand));
+            outputNode.putPOJO("output", playerTwoDeckInHandDeepCopy);
         }
         output.addPOJO(outputNode);
     }
@@ -46,7 +71,8 @@ public class Debug {
         if (playerIdx == 1) {
             LinkedList<Cards> playerOneDeckDeepCopy = new LinkedList<>();
             for (Cards card : playerOneDeck) {
-                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm") || card.getName().equals("Heart Hound")) {
+                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm")
+                        || card.getName().equals("Heart Hound")) {
                     // environment card
                     playerOneDeckDeepCopy.add(new Environment((Environment) card));
                 } else {
@@ -58,7 +84,8 @@ public class Debug {
         } else if (playerIdx == 2) {
             LinkedList<Cards> playerTwoDeckDeepCopy = new LinkedList<>();
             for (Cards card : playerTwoDeck) {
-                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm") || card.getName().equals("Heart Hound")) {
+                if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm")
+                        || card.getName().equals("Heart Hound")) {
                     // environment card
                     playerTwoDeckDeepCopy.add(new Environment((Environment) card));
                 } else {
@@ -115,8 +142,8 @@ public class Debug {
         output.addPOJO(outputNode);
     }
 
-    public static void getCardsAtPosition(ArrayNode output,
-                                          ActionsInput command, ArrayList<LinkedList<Minion>> playingTable) {
+    public static void getCardsAtPosition(ArrayNode output, ActionsInput command,
+                                          ArrayList<LinkedList<Minion>> playingTable) {
         int x = command.getX();
         int y = command.getY();
         ObjectNode outputNode = objectMapper.createObjectNode();

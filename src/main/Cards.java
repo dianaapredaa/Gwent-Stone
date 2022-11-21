@@ -105,6 +105,11 @@ class Hero extends Cards {
 
     private int health;
 
+    public Hero(Hero hero) {
+        super(hero.getMana(), hero.getDescription(), hero.getColors(), hero.getName());
+        this.setHealth(hero.health);
+    }
+
     public int getHealth() {
         return health;
     }

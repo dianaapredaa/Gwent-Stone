@@ -1,15 +1,4 @@
 [ {
-  "command" : "cardUsesAttack",
-  "cardAttacker" : {
-    "x" : 3,
-    "y" : 0
-  },
-  "cardAttacked" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacker card has already attacked this turn."
-}, {
   "command" : "getCardAtPosition",
   "x" : 0,
   "y" : 3,
@@ -24,7 +13,7 @@
     "x" : 3,
     "y" : 0
   },
-  "error" : "Attacker card has already attacked this turn."
+  "error" : "Attacker card is frozen."
 }, {
   "command" : "getCardAtPosition",
   "x" : 3,
@@ -45,7 +34,7 @@
     "description" : "Standard card: Thrown from the highest cliff, revenge will be his glory.",
     "colors" : [ "Black", "White", "Red" ],
     "name" : "The Cursed One",
-    "health" : 1,
+    "health" : 3,
     "attackDamage" : 0
   } ]
 }, {
@@ -70,17 +59,6 @@
 }, {
   "command" : "cardUsesAttack",
   "cardAttacker" : {
-    "x" : 3,
-    "y" : 0
-  },
-  "cardAttacked" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacker card has already attacked this turn."
-}, {
-  "command" : "cardUsesAttack",
-  "cardAttacker" : {
     "x" : 0,
     "y" : 1
   },
@@ -88,7 +66,7 @@
     "x" : 3,
     "y" : 0
   },
-  "error" : "Attacked card is not of type 'Tank’."
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "cardUsesAttack",
   "cardAttacker" : {
