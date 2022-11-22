@@ -1,3 +1,4 @@
+// Copyright 2022-2023 Preda Diana 324CA
 package main;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,6 +49,14 @@ public abstract class Cards {
      *
      * @return
      */
+    public int getMana() {
+        return mana;
+    }
+
+    /**
+     *
+     * @return
+     */
     public int getIsFrozen() {
         return isFrozen;
     }
@@ -60,13 +69,6 @@ public abstract class Cards {
         this.isFrozen = isFrozen;
     }
 
-    /**
-     *
-     * @return
-     */
-    public int getMana() {
-        return mana;
-    }
 
     /**
      *
@@ -129,6 +131,8 @@ public abstract class Cards {
      * @param decksInput
      * @return
      */
+
+    // get player cards from input
     public static LinkedList<LinkedList<Cards>> setCardType(final DecksInput decksInput) {
         LinkedList<LinkedList<Cards>> deckOfDecks = new LinkedList<>();
         for (int i = 0; i < decksInput.getDecks().size(); i++) {
@@ -156,6 +160,7 @@ public abstract class Cards {
     }
 }
 
+// extends for Hero cards
 class Hero extends Cards {
 
     private int health;
@@ -165,12 +170,12 @@ class Hero extends Cards {
         this.setHealth(hero.health);
     }
 
-    public int getHealth() {
-        return health;
-    }
-
     public void setHealth(final int health) {
         this.health = health;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     Hero(final CardInput cardInput) {
@@ -181,6 +186,7 @@ class Hero extends Cards {
     }
 }
 
+// extends for Environment cards
 class Environment extends Cards {
 
     Environment(final CardInput cardInput) {
@@ -194,7 +200,14 @@ class Environment extends Cards {
     }
 }
 
+// extends for Minion cards
 class Minion extends Cards {
+    Minion(final CardInput cardInput) {
+        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
+                cardInput.getName());
+        this.health = cardInput.getHealth();
+        this.attackDamage = cardInput.getAttackDamage();
+    }
     public int getHealth() {
         return health;
     }
@@ -213,13 +226,6 @@ class Minion extends Cards {
 
     private int health;
     private int attackDamage;
-
-    Minion(final CardInput cardInput) {
-        super(cardInput.getMana(), cardInput.getDescription(), cardInput.getColors(),
-                cardInput.getName());
-        this.health = cardInput.getHealth();
-        this.attackDamage = cardInput.getAttackDamage();
-    }
 
     Minion(final Minion minion) {
         super(minion.getMana(), minion.getDescription(), minion.getColors(), minion.getName());

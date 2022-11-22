@@ -1,3 +1,4 @@
+// Copyright 2022-2023 Preda Diana 324CA
 package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,11 +27,13 @@ public final class Gameplay {
      * @param playerTwoDeckInHand
      * @param a
      */
+    // place card on table
     public static void placeCard(final ArrayNode output, final ActionsInput command, final int turn,
                                  final ArrayList<LinkedList<Minion>> playingTable,
                                  final LinkedList<Cards> playerOneDeckInHand,
                                  final LinkedList<Cards> playerTwoDeckInHand, final Utils a) {
         int handIdx = command.getHandIdx();
+        // check for player turn and invalid commends
         if (turn == 1) {
             Cards cardToPlace = playerOneDeckInHand.get(handIdx);
             String cardName = cardToPlace.getName();
@@ -56,6 +59,7 @@ public final class Gameplay {
                     outputNode.put("handIdx", handIdx);
                     output.addPOJO(outputNode);
                 } else {
+                    // decrease mana and place card
                     a.setPlayerOneMana(a.getPlayerOneMana() - cardToPlace.getMana());
                     playingTable.get(2).addLast((Minion) playerOneDeckInHand.remove(handIdx));
                 }
@@ -67,6 +71,7 @@ public final class Gameplay {
                     outputNode.put("handIdx", handIdx);
                     output.addPOJO(outputNode);
                 } else {
+                    // decrease mana and place card
                     a.setPlayerOneMana(a.getPlayerOneMana() - cardToPlace.getMana());
                     playingTable.get(3).addLast((Minion) playerOneDeckInHand.remove(handIdx));
                 }
@@ -97,6 +102,7 @@ public final class Gameplay {
                     outputNode.put("handIdx", handIdx);
                     output.addPOJO(outputNode);
                 } else {
+                    // decrease mana and place card
                     a.setPlayerTwoMana(a.getPlayerTwoMana() - cardToPlace.getMana());
                     playingTable.get(1).addLast((Minion) playerTwoDeckInHand.remove(handIdx));
                 }
@@ -108,6 +114,7 @@ public final class Gameplay {
                     outputNode.put("handIdx", handIdx);
                     output.addPOJO(outputNode);
                 } else {
+                    // decrease mana and place card
                     a.setPlayerTwoMana(a.getPlayerTwoMana() - cardToPlace.getMana());
                     playingTable.get(0).addLast((Minion) playerTwoDeckInHand.remove(handIdx));
                 }
@@ -127,6 +134,7 @@ public final class Gameplay {
      * @param newGame
      * @param a
      */
+    // change turn
     public static void endPlayerTurn(final LinkedList<Cards> playerOneDeck,
                                      final LinkedList<Cards> playerTwoDeck,
                                      final LinkedList<Cards> playerOneDeckInHand,
@@ -136,7 +144,7 @@ public final class Gameplay {
                                      final StartGameInput newGame, final Utils a) {
         // check if both players played their turns
         if (a.getTurn() != newGame.getStartingPlayer()) {
-            // turn ends & add mana
+            // end turn & add mana
             a.setNumberOfRounds(a.getNumberOfRounds() + 1);
             a.setPlayerOneMana(a.getPlayerOneMana() + a.getNumberOfRounds());
             a.setPlayerTwoMana(a.getPlayerTwoMana() + a.getNumberOfRounds());
@@ -160,13 +168,17 @@ public final class Gameplay {
                         || minions == playingTable.get(3))) {
                     minion.setIsFrozen(0);
                 }
+                // don't forget to let them use their power again
                 if (minion.getAttackUsed() == 1) {
                     minion.setAttackUsed(0);
                 }
             }
         }
+
+        // also for the hero
         playerOneHero.setAttackUsed(0);
         playerTwoHero.setAttackUsed(0);
+
         // switch turns
         if (a.getTurn() == 1) {
             a.setTurn(2);
@@ -182,9 +194,11 @@ public final class Gameplay {
      * @param playingTable
      * @param turn
      */
+    // make use of card attack
     public static void cardUsesAttack(final ArrayNode output, final ActionsInput command,
                                       final ArrayList<LinkedList<Minion>> playingTable,
                                       final int turn) {
+        // get coordinates
         int cardAttackerX = command.getCardAttacker().getX();
         int cardAttackerY = command.getCardAttacker().getY();
         int cardAttackedX = command.getCardAttacked().getX();
@@ -201,6 +215,7 @@ public final class Gameplay {
             return;
         }
 
+        // check for invalid cases
         if ((turn == 1 && (cardAttackedX == 2 || cardAttackedX == 3))
                 || (turn == 2 && (cardAttackedX == 0 || cardAttackedX == 1))) {
             ObjectNode outputNode = objectMapper.createObjectNode();
@@ -225,7 +240,7 @@ public final class Gameplay {
             output.addPOJO(outputNode);
         } else {
             int isTank = Utils.isTank(playingTable, turn);
-
+            // check for 'Tank'
             if (isTank == 1 && !cardAttacked.getName().equals("Goliath")
                     && !cardAttacked.getName().equals("Warden")) {
                 ObjectNode outputNode = objectMapper.createObjectNode();
@@ -258,6 +273,7 @@ public final class Gameplay {
     public static void cardUsesAbility(final ArrayNode output, final ActionsInput command,
                                        final ArrayList<LinkedList<Minion>> playingTable,
                                        final int turn) {
+        // get coordinates
         int cardAttackerX = command.getCardAttacker().getX();
         int cardAttackerY = command.getCardAttacker().getY();
         int cardAttackedX = command.getCardAttacked().getX();
@@ -273,6 +289,7 @@ public final class Gameplay {
             return;
         }
 
+        // check for invalid cases
         if (cardAttacker.getIsFrozen() == 1) {
             ObjectNode  outputNode = objectMapper.createObjectNode();
             outputNode.put("command", "cardUsesAbility");
@@ -327,7 +344,7 @@ public final class Gameplay {
                     outputNode.put("error", "Attacked card is not of type 'Tank'.");
                     output.addPOJO(outputNode);
                 } else {
-                    // just attack
+                    // use ability
                     cardAttacker.setAttackUsed(1);
                     if (cardAttacker.getName().equals("The Ripper")) {
                         cardAttacked.setAttackDamage(cardAttacked.getAttackDamage() - 2);
@@ -362,10 +379,12 @@ public final class Gameplay {
      * @param playerOneHero
      * @param playerTwoHero
      */
+    // attack enemy's Hero
     public static void cardAttackHero(final ArrayNode output, final ActionsInput command,
                                       final ArrayList<LinkedList<Minion>> playingTable,
                                       final int turn, final Utils a, final Hero playerOneHero,
                                       final Hero playerTwoHero) {
+        // get coordinates
         int cardAttackerX = command.getCardAttacker().getX();
         int cardAttackerY = command.getCardAttacker().getY();
         Minion cardAttacker;
@@ -376,6 +395,7 @@ public final class Gameplay {
             return;
         }
 
+        // check for invalid cases
         if (cardAttacker.getIsFrozen() == 1) {
             ObjectNode outputNode = objectMapper.createObjectNode();
             outputNode.put("command", "useAttackHero");
@@ -390,7 +410,7 @@ public final class Gameplay {
             output.addPOJO(outputNode);
         } else {
             int isTank = Utils.isTank(playingTable, turn);
-
+            // check for 'Tank'
             if (isTank == 1) {
                 ObjectNode outputNode = objectMapper.createObjectNode();
                 outputNode.put("command", "useAttackHero");
@@ -399,7 +419,7 @@ public final class Gameplay {
                 output.addPOJO(outputNode);
                 return;
             }
-
+            // just attack
             if (turn == 1) {
                 cardAttacker.setAttackUsed(1);
                 if (playerTwoHero.getHealth() <= cardAttacker.getAttackDamage()) {
@@ -408,7 +428,6 @@ public final class Gameplay {
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("gameEnded", "Player one killed the enemy hero.");
                     output.addPOJO(outputNode);
-                    return;
                 } else {
                     playerTwoHero.setHealth(playerTwoHero.getHealth()
                             - cardAttacker.getAttackDamage());
@@ -439,12 +458,14 @@ public final class Gameplay {
      * @param playerOneHero
      * @param playerTwoHero
      */
+    // Hero uses ability
     public static void useHeroAbility(final ArrayNode output, final ActionsInput command,
                                       final ArrayList<LinkedList<Minion>> playingTable,
                                       final int turn, final Utils a, final Hero playerOneHero,
                                       final Hero playerTwoHero) {
         int affectedRow = command.getAffectedRow();
 
+        // check for invalid cases
         if ((turn == 1 && a.getPlayerOneMana() < playerOneHero.getMana())
                 || (turn == 2 && a.getPlayerTwoMana() < playerTwoHero.getMana())) {
             ObjectNode outputNode = objectMapper.createObjectNode();
@@ -489,7 +510,7 @@ public final class Gameplay {
             output.addPOJO(outputNode);
             return;
         }
-        // attack
+        // check for player turn
         if (turn == 1) {
             a.setPlayerOneMana(a.getPlayerOneMana() - playerOneHero.getMana());
             playerOneHero.setAttackUsed(1);
@@ -498,6 +519,7 @@ public final class Gameplay {
             playerTwoHero.setAttackUsed(1);
         }
 
+        // just attack
         if ((turn == 1 && playerOneHero.getName().equals("Lord Royce"))
                 || (turn == 2 && playerTwoHero.getName().equals("Lord Royce"))) {
             int maxAttack = -1;
@@ -560,6 +582,7 @@ public final class Gameplay {
      * @param a
      * @param turn
      */
+    // attack using Environment card
     public static void useEnvironmentCard(final ArrayNode output, final ActionsInput command,
                                           final LinkedList<Cards> playerOneDeckInHand,
                                           final LinkedList<Cards> playerTwoDeckInHand,
@@ -568,7 +591,6 @@ public final class Gameplay {
         int handIdx = command.getHandIdx();
         int affectedRow = command.getAffectedRow();
         Cards cardToPlace = null;
-
         if (turn == 1) {
             if (playerOneDeckInHand.size() > handIdx) {
                 cardToPlace = playerOneDeckInHand.get(handIdx);
@@ -582,8 +604,8 @@ public final class Gameplay {
                 return;
             }
         }
-
         String cardName = cardToPlace.getName();
+        // check for invalid cases, then attack if necessary
         if (!cardName.equals("Firestorm") && !cardName.equals("Winterfell")
                 && !cardName.equals("Heart Hound")) {
             ObjectNode outputNode = objectMapper.createObjectNode();
@@ -635,11 +657,10 @@ public final class Gameplay {
                 a.setPlayerOneMana(a.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
-                return;
-            }
-            if (turn == 1 && affectedRow == 0) {
+            } else if (turn == 1 && affectedRow == 0) {
                 for (int k = 0; k < playingTable.get(0).size(); k++) {
-                    if (playingTable.get(0).get(k).getHealth() > maxHealth) {
+                    int cardHealth = playingTable.get(0).get(k).getHealth();
+                    if (cardHealth > maxHealth) {
                         maxHealth = playingTable.get(0).get(k).getHealth();
                         maxHealthIdx = k;
                     }
@@ -648,11 +669,10 @@ public final class Gameplay {
                 a.setPlayerOneMana(a.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
-                return;
-            }
-            if (turn == 2 && affectedRow == 2) {
+            } else if (turn == 2 && affectedRow == 2) {
                 for (int k = 0; k < playingTable.get(2).size(); k++) {
-                    if (playingTable.get(2).get(k).getHealth() > maxHealth) {
+                    int cardHealth = playingTable.get(2).get(k).getHealth();
+                    if (cardHealth > maxHealth) {
                         maxHealth = playingTable.get(2).get(k).getHealth();
                         maxHealthIdx = k;
                     }
@@ -661,11 +681,10 @@ public final class Gameplay {
                 a.setPlayerOneMana(a.getPlayerOneMana()
                         - playerTwoDeckInHand.get(handIdx).getMana());
                 playerTwoDeckInHand.remove(handIdx);
-                return;
-            }
-            if (turn == 2 && affectedRow == 3) {
+            } else if (turn == 2 && affectedRow == 3) {
                 for (int k = 0; k < playingTable.get(3).size(); k++) {
-                    if (playingTable.get(3).get(k).getHealth() > maxHealth) {
+                    int cardHealth = playingTable.get(3).get(k).getHealth();
+                    if (cardHealth > maxHealth) {
                         maxHealth = playingTable.get(3).get(k).getHealth();
                         maxHealthIdx = k;
                     }
@@ -679,7 +698,8 @@ public final class Gameplay {
             for (int k = 0; k < playingTable.get(affectedRow).size(); k++) {
                 Minion card = playingTable.get(affectedRow).get(k);
                 card.setHealth(card.getHealth() - 1);
-                if (playingTable.get(affectedRow).get(k).getHealth() <= 0) {
+                int cardHealth = playingTable.get(affectedRow).get(k).getHealth();
+                if (cardHealth <= 0) {
                     // card died
                     playingTable.get(affectedRow).remove(k);
                     k--;

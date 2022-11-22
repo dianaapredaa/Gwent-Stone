@@ -1,3 +1,4 @@
+// Copyright 2022-2023 Preda Diana 324CA
 package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ public final class Debug {
      * @param playerOneDeckInHand
      * @param playerTwoDeckInHand
      */
+    // get player's cards in hand
     public static void getCardsInHand(final ArrayNode output, final ActionsInput command,
                                       final LinkedList<Cards> playerOneDeckInHand,
                                       final LinkedList<Cards> playerTwoDeckInHand) {
@@ -32,6 +34,8 @@ public final class Debug {
         LinkedList<Cards> playerOneDeckInHandDeepCopy = new LinkedList<>();
         LinkedList<Cards> playerTwoDeckInHandDeepCopy = new LinkedList<>();
 
+        // deep copy because changing are made during the game
+        // and we want to display player's cards at the exact time of the function call
         for (Cards card : playerOneDeckInHand) {
             if (card.getName().equals("Winterfell") || card.getName().equals("Firestorm")
                     || card.getName().equals("Heart Hound")) {
@@ -70,6 +74,7 @@ public final class Debug {
      * @param playerOneDeck
      * @param playerTwoDeck
      */
+    // get player's deck
     public static void getPlayerDeck(final ArrayNode output, final ActionsInput command,
                                      final LinkedList<Cards> playerOneDeck,
                                      final LinkedList<Cards> playerTwoDeck) {
@@ -79,7 +84,8 @@ public final class Debug {
         outputNode.put("command", "getPlayerDeck");
         outputNode.put("playerIdx", command.getPlayerIdx());
 
-        // display player deck
+        // deep copy because changing are made during the game
+        // and we want to display player's deck at the exact time of the function call
         if (playerIdx == 1) {
             LinkedList<Cards> playerOneDeckDeepCopy = new LinkedList<>();
             for (Cards card : playerOneDeck) {
@@ -123,6 +129,8 @@ public final class Debug {
 
         LinkedList<LinkedList<Minion>> tableDeepCopy = new LinkedList<>();
 
+        // deep copy because changing are made during the game
+        // and we want to display cards on the playing table at the exact time of the function call
         for (LinkedList<Minion> row : playingTable) {
             LinkedList<Minion> rowDeepCopy = new LinkedList<>();
             for (Minion minion : row) {

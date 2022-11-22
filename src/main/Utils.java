@@ -1,3 +1,4 @@
+// Copyright 2022-2023 Preda Diana 324CA
 package main;
 
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public final class Utils {
         this.numberOfRounds = numberOfRounds;
     }
 
-
+    // some useful variables
     private int playerOneMana = 1;
     private int playerTwoMana = 1;
     private int turn = 0;
@@ -67,6 +68,7 @@ public final class Utils {
      * @param turn
      * @return
      */
+    // check if there are any 'Tanks'
     public static int isTank(final ArrayList<LinkedList<Minion>> playingTable, final int turn) {
         int isTank = 0;
         for (int k = 0; k < playingTable.get(turn).size(); k++) {

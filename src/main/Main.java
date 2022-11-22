@@ -1,3 +1,4 @@
+// Copyright 2022-2023 Preda Diana 324CA
 package main;
 
 import checker.Checker;
