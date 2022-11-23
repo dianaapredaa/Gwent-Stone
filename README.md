@@ -11,7 +11,7 @@ Copyright 2022-2023 Preda Diana 324CA
 This project represents the implementation of a simpler version of the famous Gwent-Stone game,
 a strategy turn-base card game. There are 3 types of cards:
 
-Environment Card: *Enironment Cards can one be used once. These cards effect an entire row.*
+Environment Card: *Environment Cards can one be used once. These cards effect an entire row.*
 
 
 * Firestorm - this card lowers the 'health' points of all minions from the targeted row by 1 point
@@ -76,10 +76,10 @@ games command list, displaying required information and attacking specified card
 gets mana (equaling the number of rounds played) and one new card (from the chosen deck)
 after every round. Game ends when one player Hero is down.
 
-I made use of 5 auxiliary classes: Cards (consists of generic card type and extends with Minion,
+I made use of 6 auxiliary classes: Cards (consists of generic card type and extends with Minion,
 Hero and Environment); Debug (for debugging commends); Gameplay (for gameplay commends such as card
 uses attack or ability); Statistics (just numbers, doesn't influence game course); Utils (helps
-verifying if there is any 'Tank' type card).
+to verify if there is any 'Tank' type card); InvalidCase (display messages for cases that are incorrect).
 
 ## Possible improvements:
 - better code structure

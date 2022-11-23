@@ -13,7 +13,6 @@ import java.util.LinkedList;
 public final class Gameplay {
     private static ObjectMapper objectMapper = new ObjectMapper();
     public static final int MAX_SIZE = 5;
-
     private Gameplay() {
     }
 
@@ -25,54 +24,51 @@ public final class Gameplay {
      * @param playingTable
      * @param playerOneDeckInHand
      * @param playerTwoDeckInHand
-     * @param a
+     * @param utils
      */
     // place card on table
     public static void placeCard(final ArrayNode output, final ActionsInput command, final int turn,
                                  final ArrayList<LinkedList<Minion>> playingTable,
                                  final LinkedList<Cards> playerOneDeckInHand,
-                                 final LinkedList<Cards> playerTwoDeckInHand, final Utils a) {
+                                 final LinkedList<Cards> playerTwoDeckInHand, final Utils utils) {
         int handIdx = command.getHandIdx();
         // check for player turn and invalid commends
         if (turn == 1) {
             Cards cardToPlace = playerOneDeckInHand.get(handIdx);
             String cardName = cardToPlace.getName();
+            // if card is 'Environment' type, it can not be placed on the playing table
             if (cardName.equals("Firestorm") || cardName.equals("Winterfell")
                     || cardName.equals("Heart Hound")) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "placeCard");
-                outputNode.put("error", "Cannot place environment card on table.");
-                outputNode.put("handIdx", handIdx);
-                output.addPOJO(outputNode);
-            } else if (playerOneDeckInHand.get(handIdx).getMana() > a.getPlayerOneMana()) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "placeCard");
-                outputNode.put("error", "Not enough mana to place card on table.");
-                outputNode.put("handIdx", handIdx);
-                output.addPOJO(outputNode);
+
+                InvalidCase.placeCardEnvironmentCard(output, handIdx);
+
+                // check if there is enough mana left to place this card
+            } else if (playerOneDeckInHand.get(handIdx).getMana() > utils.getPlayerOneMana()) {
+
+                InvalidCase.placeCardNotEnoughMana(output, handIdx);
+
             } else if (cardName.equals("The Ripper") || cardName.equals("Miraj")
                     || cardName.equals("Goliath") || cardName.equals("Warden")) {
+                // not enough space on the playing table
                 if (playingTable.get(2).size() == MAX_SIZE) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "placeCard");
-                    outputNode.put("error", "Cannot place card on table since row is full.");
-                    outputNode.put("handIdx", handIdx);
-                    output.addPOJO(outputNode);
+
+                    InvalidCase.placeCardNotEnoughSpace(output, handIdx);
+
                 } else {
                     // decrease mana and place card
-                    a.setPlayerOneMana(a.getPlayerOneMana() - cardToPlace.getMana());
+                    utils.setPlayerOneMana(utils.getPlayerOneMana() - cardToPlace.getMana());
                     playingTable.get(2).addLast((Minion) playerOneDeckInHand.remove(handIdx));
                 }
-            } else {
+            } else if (cardName.equals("Sentinel") || cardName.equals("Berserker")
+                    || cardName.equals("The Cursed One") || cardName.equals("Disciple")) {
+                // not enough space on the playing table
                 if (playingTable.get(3).size() == MAX_SIZE) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "placeCard");
-                    outputNode.put("error", "Cannot place card on table since row is full.");
-                    outputNode.put("handIdx", handIdx);
-                    output.addPOJO(outputNode);
+
+                    InvalidCase.placeCardNotEnoughSpace(output, handIdx);
+
                 } else {
                     // decrease mana and place card
-                    a.setPlayerOneMana(a.getPlayerOneMana() - cardToPlace.getMana());
+                    utils.setPlayerOneMana(utils.getPlayerOneMana() - cardToPlace.getMana());
                     playingTable.get(3).addLast((Minion) playerOneDeckInHand.remove(handIdx));
                 }
             }
@@ -80,42 +76,39 @@ public final class Gameplay {
             Cards cardToPlace = playerTwoDeckInHand.get(handIdx);
             String cardName = cardToPlace.getName();
 
+            // if card is 'Environment' type, it can not be placed on the playing table
             if (cardName.equals("Firestorm") || cardName.equals("Winterfell")
                     || cardName.equals("Heart Hound")) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "placeCard");
-                outputNode.put("error", "Cannot place environment card on table.");
-                outputNode.put("handIdx", handIdx);
-                output.addPOJO(outputNode);
-            } else if (playerTwoDeckInHand.get(handIdx).getMana() > a.getPlayerTwoMana()) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "placeCard");
-                outputNode.put("error", "Not enough mana to place card on table.");
-                outputNode.put("handIdx", handIdx);
-                output.addPOJO(outputNode);
+
+                InvalidCase.placeCardEnvironmentCard(output, handIdx);
+
+                // check if there is enough mana left to place this card
+            } else if (playerTwoDeckInHand.get(handIdx).getMana() > utils.getPlayerTwoMana()) {
+
+                InvalidCase.placeCardNotEnoughMana(output, handIdx);
+
             } else if (cardName.equals("The Ripper") || cardName.equals("Miraj")
                     || cardName.equals("Goliath") || cardName.equals("Warden")) {
+                // check if there is enough space on the playing table
                 if (playingTable.get(1).size() == MAX_SIZE) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "placeCard");
-                    outputNode.put("error", "Cannot place card on table since row is full.");
-                    outputNode.put("handIdx", handIdx);
-                    output.addPOJO(outputNode);
+
+                    InvalidCase.placeCardNotEnoughSpace(output, handIdx);
+
                 } else {
                     // decrease mana and place card
-                    a.setPlayerTwoMana(a.getPlayerTwoMana() - cardToPlace.getMana());
+                    utils.setPlayerTwoMana(utils.getPlayerTwoMana() - cardToPlace.getMana());
                     playingTable.get(1).addLast((Minion) playerTwoDeckInHand.remove(handIdx));
                 }
-            } else {
+            } else if (cardName.equals("Sentinel") || cardName.equals("Berserker")
+                    || cardName.equals("The Cursed One") || cardName.equals("Disciple")) {
+                // not enough space on the playing table
                 if (playingTable.get(0).size() == MAX_SIZE) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "placeCard");
-                    outputNode.put("error", "Cannot place card on table since row is full.");
-                    outputNode.put("handIdx", handIdx);
-                    output.addPOJO(outputNode);
+
+                    InvalidCase.placeCardNotEnoughSpace(output, handIdx);
+
                 } else {
                     // decrease mana and place card
-                    a.setPlayerTwoMana(a.getPlayerTwoMana() - cardToPlace.getMana());
+                    utils.setPlayerTwoMana(utils.getPlayerTwoMana() - cardToPlace.getMana());
                     playingTable.get(0).addLast((Minion) playerTwoDeckInHand.remove(handIdx));
                 }
             }
@@ -132,7 +125,7 @@ public final class Gameplay {
      * @param playerOneHero
      * @param playerTwoHero
      * @param newGame
-     * @param a
+     * @param utils
      */
     // change turn
     public static void endPlayerTurn(final LinkedList<Cards> playerOneDeck,
@@ -141,13 +134,13 @@ public final class Gameplay {
                                      final LinkedList<Cards> playerTwoDeckInHand,
                                      final ArrayList<LinkedList<Minion>> playingTable,
                                      final Hero playerOneHero, final Hero playerTwoHero,
-                                     final StartGameInput newGame, final Utils a) {
+                                     final StartGameInput newGame, final Utils utils) {
         // check if both players played their turns
-        if (a.getTurn() != newGame.getStartingPlayer()) {
+        if (utils.getTurn() != newGame.getStartingPlayer()) {
             // end turn & add mana
-            a.setNumberOfRounds(a.getNumberOfRounds() + 1);
-            a.setPlayerOneMana(a.getPlayerOneMana() + a.getNumberOfRounds());
-            a.setPlayerTwoMana(a.getPlayerTwoMana() + a.getNumberOfRounds());
+            utils.setNumberOfRounds(utils.getNumberOfRounds() + 1);
+            utils.setPlayerOneMana(utils.getPlayerOneMana() + utils.getNumberOfRounds());
+            utils.setPlayerTwoMana(utils.getPlayerTwoMana() + utils.getNumberOfRounds());
             if (!playerOneDeck.isEmpty()) {
                 playerOneDeckInHand.addLast(playerOneDeck.removeFirst());
             }
@@ -158,12 +151,12 @@ public final class Gameplay {
         // don't forget the frozen cards
         for (LinkedList<Minion> minions : playingTable) {
             for (Minion minion : minions) {
-                if (a.getTurn() == 2 && minion.getIsFrozen() == 1
+                if (utils.getTurn() == 2 && minion.getIsFrozen() == 1
                         && (minions == playingTable.get(0)
                         || minions == playingTable.get(1))) {
                     minion.setIsFrozen(0);
                 }
-                if (a.getTurn() == 1 && minion.getIsFrozen() == 1
+                if (utils.getTurn() == 1 && minion.getIsFrozen() == 1
                         && (minions == playingTable.get(2)
                         || minions == playingTable.get(3))) {
                     minion.setIsFrozen(0);
@@ -180,10 +173,10 @@ public final class Gameplay {
         playerTwoHero.setAttackUsed(0);
 
         // switch turns
-        if (a.getTurn() == 1) {
-            a.setTurn(2);
+        if (utils.getTurn() == 1) {
+            utils.setTurn(2);
         } else {
-            a.setTurn(1);
+            utils.setTurn(1);
         }
     }
 
@@ -216,39 +209,30 @@ public final class Gameplay {
         }
 
         // check for invalid cases
+        // check if you attack you enemy card
         if ((turn == 1 && (cardAttackedX == 2 || cardAttackedX == 3))
                 || (turn == 2 && (cardAttackedX == 0 || cardAttackedX == 1))) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "cardUsesAttack");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-            outputNode.put("error", "Attacked card does not belong to the enemy.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.useAttackNotEnemyCard(output, command);
+
+            // check if the card has already been used this turn
         } else if (cardAttacker.getAttackUsed() == 1) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "cardUsesAttack");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-            outputNode.put("error", "Attacker card has already attacked this turn.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.useAttackAlreadyAttacked(output, command);
+
+            // check if the card is frozen
         } else if (cardAttacker.getIsFrozen() == 1) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "cardUsesAttack");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-            outputNode.put("error", "Attacker card is frozen.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.useAttackIsFrozen(output, command);
+
         } else {
             int isTank = Utils.isTank(playingTable, turn);
             // check for 'Tank'
             if (isTank == 1 && !cardAttacked.getName().equals("Goliath")
                     && !cardAttacked.getName().equals("Warden")) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "cardUsesAttack");
-                outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-                outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-                outputNode.put("error", "Attacked card is not of type 'Tank'.");
-                output.addPOJO(outputNode);
+
+                InvalidCase.useAttackTank(output, command);
+
             } else {
                 // just attack
                 cardAttacker.setAttackUsed(1);
@@ -290,20 +274,16 @@ public final class Gameplay {
         }
 
         // check for invalid cases
+        // check if the card is frozen
         if (cardAttacker.getIsFrozen() == 1) {
-            ObjectNode  outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "cardUsesAbility");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-            outputNode.put("error", "Attacker card is frozen.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.useAbilityIsFrozen(output, command);
+
+            // check if the card has already attacked this turn
         }  else if (cardAttacker.getAttackUsed() == 1) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "cardUsesAbility");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-            outputNode.put("error", "Attacker card has already attacked this turn.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.useAbilityAlreadyAttacked(output, command);
+
         } else {
             boolean b = (turn == 1 && (cardAttackedX == 2 || cardAttackedX == 3))
                     || (turn == 2 && (cardAttackedX == 0 || cardAttackedX == 1));
@@ -313,36 +293,26 @@ public final class Gameplay {
                     cardAttacker.setAttackUsed(1);
                     cardAttacked.setHealth(cardAttacked.getHealth() + 2);
                 } else {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "cardUsesAbility");
-                    outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-                    outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-                    outputNode.put("error", "Attacked card does not belong to the "
-                            + "current player.");
-                    output.addPOJO(outputNode);
+                    // can not use this ability on enemy's card
+                    InvalidCase.useAbilityNotMyCard(output, command);
+
                 }
             } else if (cardAttacker.getName().equals("The Ripper")
                     || cardAttacker.getName().equals("Miraj")
                     || cardAttacker.getName().equals("The Cursed One")) {
                 if (b) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "cardUsesAbility");
-                    outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-                    outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-                    outputNode.put("error", "Attacked card does not belong to the "
-                            + "enemy.");
-                    output.addPOJO(outputNode);
+
+                    // can not use this ability on your card
+                    InvalidCase.useAbilityNotEnemyCard(output, command);
                     return;
                 }
                 int isTank = Utils.isTank(playingTable, turn);
+                // check for 'Tank' cards
                 if (isTank == 1 && !cardAttacked.getName().equals("Goliath")
                         && !cardAttacked.getName().equals("Warden")) {
-                    ObjectNode outputNode = objectMapper.createObjectNode();
-                    outputNode.put("command", "cardUsesAbility");
-                    outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-                    outputNode.putPOJO("cardAttacked", command.getCardAttacked());
-                    outputNode.put("error", "Attacked card is not of type 'Tank'.");
-                    output.addPOJO(outputNode);
+
+                    InvalidCase.useAbilityTank(output, command);
+
                 } else {
                     // use ability
                     cardAttacker.setAttackUsed(1);
@@ -375,14 +345,14 @@ public final class Gameplay {
      * @param command
      * @param playingTable
      * @param turn
-     * @param a
+     * @param utils
      * @param playerOneHero
      * @param playerTwoHero
      */
     // attack enemy's Hero
     public static void cardAttackHero(final ArrayNode output, final ActionsInput command,
                                       final ArrayList<LinkedList<Minion>> playingTable,
-                                      final int turn, final Utils a, final Hero playerOneHero,
+                                      final int turn, final Utils utils, final Hero playerOneHero,
                                       final Hero playerTwoHero) {
         // get coordinates
         int cardAttackerX = command.getCardAttacker().getX();
@@ -396,27 +366,22 @@ public final class Gameplay {
         }
 
         // check for invalid cases
+        // check if card is frozen
         if (cardAttacker.getIsFrozen() == 1) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useAttackHero");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.put("error", "Attacker card is frozen.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.attackHeroIsFrozen(output, command);
+
+        // check if card has already been used this turn
         } else if (cardAttacker.getAttackUsed() == 1) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useAttackHero");
-            outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-            outputNode.put("error", "Attacker card has already attacked this turn.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.attackHeroAlreadyAttacked(output, command);
+
         } else {
             int isTank = Utils.isTank(playingTable, turn);
-            // check for 'Tank'
+            // check for 'Tank' cards
             if (isTank == 1) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "useAttackHero");
-                outputNode.putPOJO("cardAttacker", command.getCardAttacker());
-                outputNode.put("error", "Attacked card is not of type 'Tank'.");
-                output.addPOJO(outputNode);
+
+                InvalidCase.attackHeroTank(output, command);
                 return;
             }
             // just attack
@@ -424,7 +389,7 @@ public final class Gameplay {
                 cardAttacker.setAttackUsed(1);
                 if (playerTwoHero.getHealth() <= cardAttacker.getAttackDamage()) {
                     // player One wins
-                    a.setPlayerOneWins(a.getPlayerOneWins() + 1);
+                    utils.setPlayerOneWins(utils.getPlayerOneWins() + 1);
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("gameEnded", "Player one killed the enemy hero.");
                     output.addPOJO(outputNode);
@@ -436,7 +401,7 @@ public final class Gameplay {
                 cardAttacker.setAttackUsed(1);
                 if (playerOneHero.getHealth() <= cardAttacker.getAttackDamage()) {
                     // player Two wins
-                    a.setPlayerTwoWins(a.getPlayerTwoWins() +  1);
+                    utils.setPlayerTwoWins(utils.getPlayerTwoWins() +  1);
                     ObjectNode outputNode = objectMapper.createObjectNode();
                     outputNode.put("gameEnded", "Player two killed the enemy hero.");
                     output.addPOJO(outputNode);
@@ -454,68 +419,60 @@ public final class Gameplay {
      * @param command
      * @param playingTable
      * @param turn
-     * @param a
+     * @param utils
      * @param playerOneHero
      * @param playerTwoHero
      */
     // Hero uses ability
     public static void useHeroAbility(final ArrayNode output, final ActionsInput command,
                                       final ArrayList<LinkedList<Minion>> playingTable,
-                                      final int turn, final Utils a, final Hero playerOneHero,
+                                      final int turn, final Utils utils, final Hero playerOneHero,
                                       final Hero playerTwoHero) {
         int affectedRow = command.getAffectedRow();
 
         // check for invalid cases
-        if ((turn == 1 && a.getPlayerOneMana() < playerOneHero.getMana())
-                || (turn == 2 && a.getPlayerTwoMana() < playerTwoHero.getMana())) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useHeroAbility");
-            outputNode.put("affectedRow", affectedRow);
-            outputNode.put("error", "Not enough mana to use hero's ability.");
-            output.addPOJO(outputNode);
+        // check if player has enough mana to use this card
+        if ((turn == 1 && utils.getPlayerOneMana() < playerOneHero.getMana())
+                || (turn == 2 && utils.getPlayerTwoMana() < playerTwoHero.getMana())) {
+
+            InvalidCase.heroAbilityNotEnoughMana(output, affectedRow);
             return;
-        }
-        if ((turn == 1 && playerOneHero.getAttackUsed() == 1)
+
+            // check if card has already been used this turn
+        } else if ((turn == 1 && playerOneHero.getAttackUsed() == 1)
                 || (turn == 2 && playerTwoHero.getAttackUsed() == 1)) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useHeroAbility");
-            outputNode.put("affectedRow", affectedRow);
-            outputNode.put("error", "Hero has already attacked this turn.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.heroAbilityAlreadyAttacked(output, affectedRow);
             return;
-        }
-        if ((turn == 1 && (playerOneHero.getName().equals("Lord Royce")
+
+            // you can not use this ability on you row
+        } else if ((turn == 1 && (playerOneHero.getName().equals("Lord Royce")
                 || playerOneHero.getName().equals("Empress Thorina"))
                 && (affectedRow == 2 || affectedRow == 3))
                 || (turn == 2 && (playerTwoHero.getName().equals("Lord Royce")
                 || playerTwoHero.getName().equals("Empress Thorina"))
                 && (affectedRow == 0 || affectedRow == 1))) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useHeroAbility");
-            outputNode.put("affectedRow", affectedRow);
-            outputNode.put("error", "Selected row does not belong to the enemy.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.heroAbilityNotEnemyRow(output, affectedRow);
             return;
-        }
-        if ((turn == 1 && (playerOneHero.getName().equals("General Kocioraw")
+
+            // you can not use this ability on enemy row
+        } else if ((turn == 1 && (playerOneHero.getName().equals("General Kocioraw")
                 || playerOneHero.getName().equals("King Mudface"))
                 && (affectedRow == 0 || affectedRow == 1))
                 || (turn == 2 && (playerTwoHero.getName().equals("General Kocioraw")
                 || playerTwoHero.getName().equals("King Mudface"))
                 && (affectedRow == 2 || affectedRow == 3))) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useHeroAbility");
-            outputNode.put("affectedRow", affectedRow);
-            outputNode.put("error", "Selected row does not belong to the current player.");
-            output.addPOJO(outputNode);
+
+            InvalidCase.heroAbilityNotMyRow(output, affectedRow);
             return;
         }
         // check for player turn
         if (turn == 1) {
-            a.setPlayerOneMana(a.getPlayerOneMana() - playerOneHero.getMana());
+            utils.setPlayerOneMana(utils.getPlayerOneMana() - playerOneHero.getMana());
             playerOneHero.setAttackUsed(1);
         } else if (turn == 2) {
-            a.setPlayerTwoMana(a.getPlayerTwoMana() - playerTwoHero.getMana());
+            utils.setPlayerTwoMana(utils.getPlayerTwoMana() - playerTwoHero.getMana());
             playerTwoHero.setAttackUsed(1);
         }
 
@@ -579,7 +536,7 @@ public final class Gameplay {
      * @param playerOneDeckInHand
      * @param playerTwoDeckInHand
      * @param playingTable
-     * @param a
+     * @param utils
      * @param turn
      */
     // attack using Environment card
@@ -587,7 +544,7 @@ public final class Gameplay {
                                           final LinkedList<Cards> playerOneDeckInHand,
                                           final LinkedList<Cards> playerTwoDeckInHand,
                                           final ArrayList<LinkedList<Minion>> playingTable,
-                                          final Utils a, final int turn) {
+                                          final Utils utils, final int turn) {
         int handIdx = command.getHandIdx();
         int affectedRow = command.getAffectedRow();
         Cards cardToPlace = null;
@@ -606,42 +563,34 @@ public final class Gameplay {
         }
         String cardName = cardToPlace.getName();
         // check for invalid cases, then attack if necessary
+        // check if card is 'Environment' type
         if (!cardName.equals("Firestorm") && !cardName.equals("Winterfell")
                 && !cardName.equals("Heart Hound")) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useEnvironmentCard");
-            outputNode.put("error", "Chosen card is not of type environment.");
-            outputNode.put("handIdx", handIdx);
-            outputNode.put("affectedRow", affectedRow);
-            output.addPOJO(outputNode);
-        } else if ((turn == 1 && playerOneDeckInHand.get(handIdx).getMana() > a.getPlayerOneMana())
+
+            InvalidCase.notEnvironmentType(output, affectedRow, handIdx);
+
+            // check if player has enough mana to use this card
+        } else if ((turn == 1 && playerOneDeckInHand.get(handIdx).getMana()
+                > utils.getPlayerOneMana())
                 || (turn == 2 && playerTwoDeckInHand.get(handIdx).getMana()
-                > a.getPlayerTwoMana())) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useEnvironmentCard");
-            outputNode.put("error", "Not enough mana to use environment card.");
-            outputNode.put("handIdx", handIdx);
-            outputNode.put("affectedRow", affectedRow);
-            output.addPOJO(outputNode);
+                > utils.getPlayerTwoMana())) {
+
+            InvalidCase.environmentCardNotEnoughMana(output, affectedRow, handIdx);
+
+            // you cannot use this cards on you row
         } else if ((turn == 1 && (affectedRow == 2 || affectedRow == 3))
                 || (turn == 2 && (affectedRow == 0 || affectedRow == 1))) {
-            ObjectNode outputNode = objectMapper.createObjectNode();
-            outputNode.put("command", "useEnvironmentCard");
-            outputNode.put("error", "Chosen row does not belong to the enemy.");
-            outputNode.put("handIdx", handIdx);
-            outputNode.put("affectedRow", affectedRow);
-            output.addPOJO(outputNode);
+
+                InvalidCase.environmentCardNotEnemyRow(output, affectedRow, handIdx);
+
+            // check if there is any space left on the affected row of the playing table
         } else if (cardName.equals("Heart Hound")) {
             if ((turn == 1 && affectedRow == 1 && playingTable.get(2).size() == MAX_SIZE)
                     || (turn == 1 && affectedRow == 0 && playingTable.get(3).size() == MAX_SIZE)
                     || (turn == 2 && affectedRow == 2 && playingTable.get(1).size() == MAX_SIZE)
                     || (turn == 2 && affectedRow == 3 && playingTable.get(0).size() == MAX_SIZE)) {
-                ObjectNode outputNode = objectMapper.createObjectNode();
-                outputNode.put("command", "useEnvironmentCard");
-                outputNode.put("error", "Cannot steal enemy card since the player's row is full.");
-                outputNode.put("handIdx", handIdx);
-                outputNode.put("affectedRow", affectedRow);
-                output.addPOJO(outputNode);
+
+                InvalidCase.environmentCardNotEnoughSpace(output, affectedRow, handIdx);
                 return;
             }
             int maxHealth = 0;
@@ -654,7 +603,7 @@ public final class Gameplay {
                     }
                 }
                 playingTable.get(2).add(playingTable.get(1).remove(maxHealthIdx));
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
             } else if (turn == 1 && affectedRow == 0) {
@@ -666,7 +615,7 @@ public final class Gameplay {
                     }
                 }
                 playingTable.get(3).add(playingTable.get(0).remove(maxHealthIdx));
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
             } else if (turn == 2 && affectedRow == 2) {
@@ -678,7 +627,7 @@ public final class Gameplay {
                     }
                 }
                 playingTable.get(1).add(playingTable.get(2).remove(maxHealthIdx));
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerTwoDeckInHand.get(handIdx).getMana());
                 playerTwoDeckInHand.remove(handIdx);
             } else if (turn == 2 && affectedRow == 3) {
@@ -690,7 +639,7 @@ public final class Gameplay {
                     }
                 }
                 playingTable.get(0).add(playingTable.get(3).remove(maxHealthIdx));
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerTwoDeckInHand.get(handIdx).getMana());
                 playerTwoDeckInHand.remove(handIdx);
             }
@@ -706,12 +655,12 @@ public final class Gameplay {
                 }
             }
             if (turn == 1) {
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
             }
             if (turn == 2) {
-                a.setPlayerTwoMana(a.getPlayerTwoMana()
+                utils.setPlayerTwoMana(utils.getPlayerTwoMana()
                         - playerTwoDeckInHand.get(handIdx).getMana());
                 playerTwoDeckInHand.remove(handIdx);
             }
@@ -721,11 +670,11 @@ public final class Gameplay {
             }
 
             if (turn == 1) {
-                a.setPlayerOneMana(a.getPlayerOneMana()
+                utils.setPlayerOneMana(utils.getPlayerOneMana()
                         - playerOneDeckInHand.get(handIdx).getMana());
                 playerOneDeckInHand.remove(handIdx);
             } else if (turn == 2) {
-                a.setPlayerTwoMana(a.getPlayerTwoMana()
+                utils.setPlayerTwoMana(utils.getPlayerTwoMana()
                         - playerTwoDeckInHand.get(handIdx).getMana());
                 playerTwoDeckInHand.remove(handIdx);
             }

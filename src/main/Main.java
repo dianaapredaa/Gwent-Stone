@@ -31,7 +31,7 @@ public final class Main {
     /**
      * DO NOT MODIFY MAIN METHOD
      * Call the checker
-     * @param args from command line
+     * @param utilsrgs from command line
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void main(final String[] args) throws IOException {
@@ -77,13 +77,13 @@ public final class Main {
         LinkedList<LinkedList<Cards>> playerOne = Cards.setCardType(inputData.getPlayerOneDecks());
         LinkedList<LinkedList<Cards>> playerTwo = Cards.setCardType(inputData.getPlayerTwoDecks());
 
-        Utils a = new Utils();
-        a.setPlayerOneWins(0);
-        a.setPlayerTwoWins(0);
+        Utils utils = new Utils();
+        utils.setPlayerOneWins(0);
+        utils.setPlayerTwoWins(0);
 
         for (int i = 0; i < inputData.getGames().size(); i++) {
-            a.setPlayerOneMana(1);
-            a.setPlayerTwoMana(1);
+            utils.setPlayerOneMana(1);
+            utils.setPlayerTwoMana(1);
 
             // current game
             StartGameInput newGame = inputData.getGames().get(i).getStartGame();
@@ -148,8 +148,8 @@ public final class Main {
             Hero playerTwoHero = new Hero(newGame.getPlayerTwoHero());
 
             // get first turn
-            a.setTurn(newGame.getStartingPlayer());
-            a.setNumberOfRounds(1);
+            utils.setTurn(newGame.getStartingPlayer());
+            utils.setNumberOfRounds(1);
 
             // iterate through the command list
             for (int j = 0; j < commandList.size(); j++) {
@@ -160,41 +160,41 @@ public final class Main {
                     case ("getPlayerDeck") -> Debug.getPlayerDeck(output, command,
                             playerOneDeck, playerTwoDeck);
                     case ("getCardsOnTable") -> Debug.getCardsOnTable(output, playingTable);
-                    case ("getPlayerTurn") -> Debug.getPlayerTurn(output, a.getTurn());
+                    case ("getPlayerTurn") -> Debug.getPlayerTurn(output, utils.getTurn());
                     case ("getPlayerHero") -> Debug.getPlayerHero(output, command, playerOneHero,
                             playerTwoHero);
                     case ("getCardAtPosition") -> Debug.getCardsAtPosition(output, command,
                             playingTable);
                     case ("getPlayerMana") ->
-                            Debug.getPlayerMana(output, command, a.getPlayerOneMana(),
-                                    a.getPlayerTwoMana());
+                            Debug.getPlayerMana(output, command, utils.getPlayerOneMana(),
+                                    utils.getPlayerTwoMana());
                     case ("getEnvironmentCardsInHand") -> Debug.getEnvironmentCardsInHand(output,
                             command, playerOneDeckInHand, playerTwoDeckInHand);
                     case ("getFrozenCardsOnTable") -> Debug.getFrozenCardsOnTable(output,
                             playingTable);
                     case ("getTotalGamesPlayed") -> Statistics.getTotalGamesPlayed(output, i);
                     case ("getPlayerOneWins") -> Statistics.getPlayerOneWins(output,
-                            a.getPlayerOneWins());
+                            utils.getPlayerOneWins());
                     case ("getPlayerTwoWins") -> Statistics.getPlayerTwoWins(output,
-                            a.getPlayerTwoWins());
+                            utils.getPlayerTwoWins());
                     case ("endPlayerTurn") -> Gameplay.endPlayerTurn(playerOneDeck, playerTwoDeck,
                             playerOneDeckInHand, playerTwoDeckInHand, playingTable, playerOneHero,
-                            playerTwoHero, newGame, a);
-                    case ("placeCard") -> Gameplay.placeCard(output, command, a.getTurn(),
-                            playingTable, playerOneDeckInHand, playerTwoDeckInHand, a);
+                            playerTwoHero, newGame, utils);
+                    case ("placeCard") -> Gameplay.placeCard(output, command, utils.getTurn(),
+                            playingTable, playerOneDeckInHand, playerTwoDeckInHand, utils);
                     case ("cardUsesAttack") -> Gameplay.cardUsesAttack(output, command,
-                            playingTable, a.getTurn());
+                            playingTable, utils.getTurn());
                     case ("cardUsesAbility") -> Gameplay.cardUsesAbility(output, command,
-                            playingTable, a.getTurn());
+                            playingTable, utils.getTurn());
                     case ("useAttackHero") ->
-                            Gameplay.cardAttackHero(output, command, playingTable, a.getTurn(), a,
-                                    playerOneHero, playerTwoHero);
+                            Gameplay.cardAttackHero(output, command, playingTable, utils.getTurn(),
+                                    utils, playerOneHero, playerTwoHero);
                     case ("useHeroAbility") ->
-                            Gameplay.useHeroAbility(output, command, playingTable, a.getTurn(), a,
-                                    playerOneHero, playerTwoHero);
+                            Gameplay.useHeroAbility(output, command, playingTable, utils.getTurn(),
+                                    utils, playerOneHero, playerTwoHero);
                     case ("useEnvironmentCard") ->
                             Gameplay.useEnvironmentCard(output, command, playerOneDeckInHand,
-                                    playerTwoDeckInHand, playingTable, a, a.getTurn());
+                                    playerTwoDeckInHand, playingTable, utils, utils.getTurn());
                     default -> System.out.println("Nothing to do here");
                 }
             }
