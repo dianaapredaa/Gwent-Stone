@@ -71,10 +71,15 @@ kill opponent's Hero. Each hero starts with 30 'health' point. There are 4 types
 ## Implementation
 
 My game implementations follows a few simple steps: from the beginning I get from the
-input necessary information for my game, such as player's Decks, Cards and Heroes. Then I iterate through
-games command list, displaying required information and attacking specified cards and rows. Every player
-gets mana (equaling the number of rounds played) and one new card (from the chosen deck)
-after every round. Game ends when one player Hero is down.
+input necessary information for my game, such as player's Decks, Cards and Heroes. Then I iterate
+through games command list, displaying required information and attacking specified cards and rows.
+
+**Very Important:** Every player gets mana (equaling the number of rounds played) and one new card
+(from the chosen deck) after every round. Game ends when one player Hero is down. Only Minions can
+be displayed on the playing table. Player One has rows 2 and 3. Player Two has rows 0 and 1.
+The Ripper, Miraj, Goliath and Warden cards can only be placed on rows 1 and 2, whereas Sentinel,
+Berserker, The Cursed One and Disciple cards can only be placed on rows 3 and 4. Goliath and Warden
+cards are 'Tank' and they must be attacked first.
 
 I made use of 6 auxiliary classes: Cards (consists of generic card type and extends with Minion,
 Hero and Environment); Debug (for debugging commends); Gameplay (for gameplay commends such as card
